@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:," />
+    <title>Agentic Game Factory</title>
+    <style>
+      @import "@fontsource/press-start-2p/latin-400.css";
+      body {
+        margin: 0;
+        padding: 32px 16px;
+        background: var(--night);
+        color: var(--nightInk);
+        font:
+          16px/1.6 "Press Start 2P",
+          monospace;
+      }
+      main {
+        max-width: 1120px;
+        margin: 0 auto;
+      }
+      h1 {
+        margin: 0 0 32px;
+        font-size: inherit;
+      }
+      ul {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+        gap: 24px;
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      li {
+        max-width: 640px;
+      }
+      a {
+        display: grid;
+        grid-template: auto 1fr / minmax(0, 1fr);
+        height: 100%;
+        background: var(--ink);
+        color: var(--amber);
+        text-decoration: none;
+        text-underline-offset: 6px;
+        overflow-wrap: anywhere;
+      }
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+      }
+      span {
+        padding: 16px;
+      }
+      /* A game without a cover: its title on the plain field, as large as a cover and its title. */
+      span:only-child {
+        display: grid;
+        box-sizing: border-box;
+        grid-row: 1 / 3;
+        place-items: center;
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        text-align: center;
+      }
+      a:hover,
+      a:focus-visible {
+        text-decoration: underline;
+        outline: 2px solid var(--amber);
+      }
+      a:focus-visible {
+        outline: 4px solid var(--nightInk);
+        outline-offset: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Games built with the Agentic Game Factory</h1>
+      <ul>
+        <!-- games -->
+      </ul>
+    </main>
+  </body>
+</html>

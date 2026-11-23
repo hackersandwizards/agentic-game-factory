@@ -1,0 +1,158 @@
+<!doctype html>
+<html
+  lang="en"
+  data-composition-variables='[{"id":"title","type":"string","label":"Game title","default":"BRING THE PRESENT HOME"},{"id":"tagline","type":"string","label":"Tagline","default":"A tiny Christmas platformer"},{"id":"url","type":"string","label":"Play URL","default":"https://hackersandwizards.github.io/agentic-game-factory/examples/present/","description":"Shown on the end card and encoded in its QR code."},{"id":"endLine","type":"string","label":"End card line","default":"PLAY IT IN YOUR BROWSER"}]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/brand.js"></script>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <script src="assets/vendor/qrcode.js"></script>
+    <style>
+      @font-face {
+        font-family: "Press Start 2P";
+        src: url("assets/vendor/press-start-2p-latin-400-normal.woff2") format("woff2");
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--night);
+        font-family: "Press Start 2P", monospace;
+        color: #e8f1f2;
+      }
+      .clip {
+        position: absolute;
+        inset: 0;
+      }
+      .pixel {
+        image-rendering: pixelated;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      /* the runtime sets each clip's own display, so the centring sits on an inner box */
+      .card {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 48px;
+        text-align: center;
+      }
+      #title-text {
+        font-size: 80px;
+        line-height: 1.4;
+        color: #f59e0b;
+        max-width: 1600px;
+      }
+      #tagline-text {
+        font-size: 32px;
+      }
+      #end .strip {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 280px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 96px;
+        background: #05080c;
+      }
+      #end-line {
+        font-size: 40px;
+        color: #4ade80;
+      }
+      #url-text {
+        font-size: 18px;
+        margin-top: 32px;
+        color: #d1d5db;
+        white-space: nowrap;
+      }
+      #qr {
+        width: 225px;
+        height: 225px;
+        image-rendering: pixelated;
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+      A trailer: title card, a gameplay clip fading in under the title's fade-out (no black
+      frame between them), an end card on the game's own title screen.
+      `bun run trailer` copies ../docs/gameplay.mp4 and ../docs/title.png into assets/ when they are
+      newer than the copies; put your own clip.mp4 and title.png there instead. The clip's in-point is
+      data-media-start below.
+    -->
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="24"
+      data-width="1920"
+      data-height="1080"
+    >
+      <div id="intro" class="clip" data-start="0" data-duration="3" data-track-index="1">
+        <div class="card">
+          <div id="title-text" data-var-text="title">BRING THE PRESENT HOME</div>
+          <div id="tagline-text" data-var-text="tagline">A tiny Christmas platformer</div>
+        </div>
+      </div>
+      <video
+        id="gameplay"
+        class="clip pixel"
+        src="assets/clip.mp4"
+        playsinline
+        data-has-audio="true"
+        data-start="2.7"
+        data-duration="17.3"
+        data-media-start="0.3"
+        data-fade-in="0.3"
+        data-fade-out="0.5"
+        data-track-index="0"
+      ></video>
+      <div id="end" class="clip" data-start="20" data-duration="4" data-track-index="1">
+        <img class="pixel" src="assets/title.png" alt="" />
+        <div class="strip">
+          <div>
+            <div id="end-line" data-var-text="endLine">PLAY IT IN YOUR BROWSER</div>
+            <div id="url-text" data-var-text="url"></div>
+          </div>
+          <canvas id="qr"></canvas>
+        </div>
+      </div>
+    </div>
+    <script>
+      const { url } = window.__hyperframes.getVariables();
+      document.getElementById("url-text").textContent = url;
+      const q = qrcode(0, "M");
+      q.addData(url);
+      q.make();
+      // four light modules of quiet zone round the code, as the greeting's
+      const n = q.getModuleCount() + 8;
+      const qr = document.getElementById("qr");
+      qr.width = qr.height = n;
+      const g = qr.getContext("2d");
+      g.fillStyle = "#e8f1f2";
+      g.fillRect(0, 0, n, n);
+      g.fillStyle = "#05080c";
+      for (let y = 0; y < n - 8; y++)
+        for (let x = 0; x < n - 8; x++) if (q.isDark(y, x)) g.fillRect(x + 4, y + 4, 1, 1);
+
+      // Pixel motion: stepped eases, so text moves in whole steps like the game.
+      const tl = gsap.timeline({ paused: true });
+      tl.from("#title-text", { y: -60, opacity: 0, duration: 0.6, ease: "steps(6)" }, 0.2);
+      tl.from("#tagline-text", { opacity: 0, duration: 0.4, ease: "steps(4)" }, 0.9);
+      tl.to("#title-text, #tagline-text", { opacity: 0, duration: 0.3, ease: "steps(3)" }, 2.7);
+      tl.from("#end .strip", { y: 280, duration: 0.5, ease: "steps(5)" }, 20.4);
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:," />
+    <title>Bring the present home</title>
+    <meta
+      name="description"
+      content="A tiny Christmas platformer from hackers&amp;wizards, built with the Agentic Game Factory."
+    />
+    <style>
+      html,
+      body,
+      main {
+        margin: 0;
+        height: 100%;
+        background: var(--night);
+      }
+      /* Inline, the canvas would leave a line gap below it that scrolls the page; and Phaser centres it with a
+         top margin, which escapes main unless main makes its own block context. */
+      canvas {
+        display: block;
+      }
+      /* Where the canvas shows at least one screen pixel per art pixel (960x540), the browser scales it with hard
+         edges: smoothed, the HUD's digits read soft at 1280x720. Smaller, nearest sampling would drop art pixels. */
+      @media (min-width: 960px) and (min-height: 540px) {
+        canvas {
+          image-rendering: pixelated;
+        }
+      }
+      main {
+        display: flow-root;
+      }
+      /* A phone held upright shows the game small: suggest turning it, in the empty band above the canvas
+         (the canvas is 9/16 of the width tall and centred), so the touch buttons below stay free. */
+      #rotate {
+        display: none;
+        position: fixed;
+        inset: auto 0 calc(50dvh + 28.125vw + 12px) 0;
+        margin: 0;
+        text-align: center;
+        font:
+          16px/1.6 "Press Start 2P",
+          monospace;
+        color: #e8f1f2;
+        pointer-events: none;
+      }
+      /* Upright, the touch buttons sit in the band under the canvas, which is 9/16 of the width tall.
+         ui/touch.ts shows them and draws them from the same textures as the in-game ones. Within a pair the gap is a
+         quarter of the room the buttons leave, 16 to 24 px; the pairs stand apart by the rest, twice that or more. */
+      #pad {
+        --size: 66px;
+        position: fixed;
+        top: calc(50dvh + 28.125vw + 16px);
+        left: 16px;
+        right: 16px;
+        display: flex;
+        gap: clamp(16px, calc((100vw - 32px - 4 * var(--size)) / 4), 24px);
+      }
+      #pad[hidden] {
+        display: none;
+      }
+      #pad button {
+        flex-shrink: 0;
+        width: var(--size);
+        height: var(--size);
+        padding: 0;
+        border: 0;
+        background: center no-repeat;
+        image-rendering: pixelated;
+        touch-action: none;
+        user-select: none;
+        -webkit-user-select: none;
+        -webkit-touch-callout: none;
+      }
+      #pad button:nth-child(3) {
+        margin-left: auto;
+      }
+      /* The dash's sparkle alone did not say what it does: its name under it, in the sparkle's teal, on a button
+         of 56 px or more (ui/touch.ts marks a smaller pad "small"): on 44 px it touched the sparkle and the ring. */
+      #pad button[aria-label="dash"]::after {
+        content: "DASH";
+        position: relative;
+        top: calc(var(--size) / 4);
+        font: 8px "Press Start 2P";
+        color: #2dd4bf;
+      }
+      #pad.small button[aria-label="dash"]::after {
+        content: none;
+      }
+      /* Sideways on a phone (ui/touch.ts decides), the buttons stand in the lower corners, 16 px from the edges and
+         16 px apart, as on a gamepad: left and right on the left, dash and jump on the right. */
+      #pad.sides {
+        inset: 0;
+        pointer-events: none;
+      }
+      #pad.sides button {
+        position: absolute;
+        bottom: 16px;
+        left: 16px;
+        margin: 0;
+        pointer-events: auto;
+      }
+      #pad.sides button:nth-child(2) {
+        left: calc(32px + var(--size));
+      }
+      #pad.sides button:nth-child(n + 3) {
+        left: auto;
+        right: calc(32px + var(--size));
+      }
+      #pad.sides button:nth-child(4) {
+        right: 16px;
+      }
+      /* Upright, the title's 18+ and sound switches would show about 20 CSS px on the conveyor: shell/title/strip.ts shows
+         them here instead, under the canvas on the right, as HTML buttons drawn from the same textures. */
+      #switches {
+        position: fixed;
+        top: calc(50dvh + 28.125vw + 16px);
+        right: 16px;
+        display: flex;
+        gap: 24px;
+      }
+      #switches[hidden] {
+        display: none;
+      }
+      #switches button {
+        width: 48px;
+        height: 48px;
+        padding: 0;
+        border: 0;
+        background: #05080c center no-repeat;
+        image-rendering: pixelated;
+      }
+      /* Upright, the canvas draws text about 8 CSS px tall: ui/bands.ts writes the same lines here, readable.
+         Above the canvas the end panel, below it (under the touch buttons while they show) how to play
+         and the end screen's invitation. */
+      #above,
+      #below {
+        position: fixed;
+        left: 16px;
+        right: 16px;
+        margin: 0;
+        text-align: center;
+        white-space: pre-wrap;
+        font:
+          12px/1.25 "Press Start 2P",
+          monospace;
+        color: #e8f1f2;
+        pointer-events: none;
+      }
+      /* The end panel's 10 lines (ui/win-panel.ts moves its last two below the canvas) share the band above the canvas
+         under a 16 px margin, up to 20 px a line: at 13 px, 1 px between lines, they read as a wall. On a 320x568
+         phone that is 17 px. */
+      #above {
+        bottom: calc(50dvh + 28.125vw + 8px);
+        line-height: clamp(13px, (50dvh - 28.125vw - 24px) / 10, 20px);
+      }
+      #below {
+        top: calc(50dvh + 28.125vw + 98px);
+      }
+      #pad[hidden] + #below {
+        top: calc(50dvh + 28.125vw + 16px);
+      }
+      #above[hidden],
+      #below[hidden],
+      #above:not([hidden]) ~ #rotate {
+        display: none;
+      }
+      /* Upright, the HUD: ui/hud.ts shows it here instead of on the small canvas, right above it, the rotate hint
+         above it in turn. Its icons are half a CSS px an art pixel, as beside the canvas's 12 px text. On a 320 px
+         phone in 18+ mode with the secret found it ran past the screen's right edge: the gap shrinks to 3 px there,
+         the room its parts leave. */
+      #hud {
+        position: fixed;
+        left: 16px;
+        bottom: calc(50dvh + 28.125vw + 8px);
+        display: flex;
+        align-items: center;
+        gap: clamp(3px, 4vw - 10px, 12px);
+        max-width: calc(100vw - 32px);
+        box-sizing: border-box;
+        padding: 0 8px;
+        white-space: nowrap;
+        background: #05080c;
+        font:
+          12px "Press Start 2P",
+          monospace;
+        pointer-events: none;
+      }
+      #hud img {
+        image-rendering: pixelated;
+      }
+      #hud button {
+        flex-shrink: 0;
+        width: 44px;
+        height: 44px;
+        margin: 0 -10px;
+        padding: 0;
+        border: 0;
+        background: none;
+        pointer-events: auto;
+      }
+      #hud[hidden] {
+        display: none;
+      }
+      #hud:not([hidden]) ~ #rotate {
+        bottom: calc(50dvh + 28.125vw + 68px);
+      }
+      @media not (orientation: portrait) {
+        #above,
+        #below {
+          display: none;
+        }
+      }
+      @media (orientation: portrait) and (pointer: coarse) {
+        #rotate {
+          display: block;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main id="screen"></main>
+    <div id="pad" hidden>
+      <button aria-label="left"></button><button aria-label="right"></button
+      ><button aria-label="dash"></button><button aria-label="jump"></button>
+    </div>
+    <div id="below" hidden></div>
+    <div id="above" hidden></div>
+    <div id="hud" hidden></div>
+    <p id="rotate">ROTATE FOR<br />FULL SCREEN</p>
+    <div id="switches" hidden><button aria-label="18+"></button><button aria-label="sound"></button></div>
+    <script type="module" src="./shell/main.ts"></script>
+  </body>
+</html>

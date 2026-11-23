@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "model": "fable",
+  "effortLevel": "low",
+  "subagentPromptCacheTtl": "1h",
+  "autoMemoryEnabled": false,
+  "env": {
+    "DISABLE_ERROR_REPORTING": "1",
+    "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
+    "MCP_TIMEOUT": "180000"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(bun install --frozen-lockfile)",
+      "Bash(bun run dev)",
+      "Bash(bun run build)",
+      "Bash(bun run build -- --outDir *)",
+      "Bash(bun run check)",
+      "Bash(bun run check --changed *)",
+      "Bash(bun run check:staged)",
+      "Bash(bun run check:links)",
+      "Bash(bun run check:dependencies)",
+      "Bash(bun run check:advisories)",
+      "Bash(bun run format)",
+      "Bash(bun run lint)",
+      "Bash(bun run test)",
+      "Bash(bun run test:coverage)",
+      "Bash(bun run test:e2e)",
+      "Bash(bun run explore)",
+      "Bash(bun run explore --seed *)",
+      "Bash(bun run trailer)",
+      "Bash(bun run greeting *)",
+      "Bash(bun .claude/skills/playtest/playtest.mjs)",
+      "Bash(bun .claude/skills/playtest/playtest.mjs *)",
+      "mcp__chrome-devtools",
+      "WebSearch"
+    ],
+    "deny": ["Read(./.env)", "Read(./.env.*)"]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$CLAUDE_PROJECT_DIR/.githooks/session-start\"",
+            "timeout": 65
+          }
+        ]
+      }
+    ]
+  }
+}

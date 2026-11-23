@@ -1,0 +1,30 @@
+Generate images with your image generation tool, then copy each final image into the current working directory under the exact file names below. Edit no other file. Check that both files exist before you finish and print their pixel sizes.
+
+Attached: reference.png (the style, room and camera to keep) and mascot.png (the mascot's head and hat).
+
+Style, strict: 2D pixel art, 16-bit Metroidvania look exactly like reference.png. Hand-placed pixels, hard edges, a limited palette, no gradients, no blur, no soft glow, no painterly shading, no photographic light (the Owlboy rule). Palette: night blue #0B1118 and #111A24 as the base, teal #1A7285 and purple #9333EA as dominant glows, amber #F59E0B for warm lights, small green #4ADE80 accents. Same room, same camera at eye level, same wide 16:9 framing as reference.png: a cosy Christmas elves' workshop that is also a hackerspace, at night, with the arched snowy window, fireplace, string lights, wooden beams, workbenches and the conveyor belt across the foreground.
+
+Absolutely no text, letters, numbers, digits, symbols, logos or brand marks anywhere in the image. Every screen, sign, label, tag, plaque, book cover, poster and certificate is blank.
+
+Screens: every monitor and laptop screen is a flat, evenly lit, empty dark-teal rectangle facing the camera as directly as possible, no content, no reflections, no perspective skew where avoidable.
+
+People and things to show (the h&w layer):
+- The mascot as the central wizard, standing in the middle of the room: yellow emoji-style round face with big friendly eyes, light-blue hair, a tall crooked dark-brown pointed hat with a copper band (exactly like mascot.png), long dark robe, holding a wooden staff topped with a teal crystal, a grey laptop open on the desk in front of him with its lid facing the camera (lid blank, no logo).
+- A second wizard with glasses and a white beard in a blue robe at a laptop.
+- Elves in hoodies coding at laptops on the workbenches.
+- The conveyor belt as a software-factory production line: wrapped presents with blank gift tags riding on it; at its right end a review elf inspecting a present with a big magnifying glass.
+- A lectern with a glowing open spellbook (blank pages).
+- A shelf of potion bottles with blank labels.
+- A lead elf with a few tiny helper elves running errands around him carrying parcels.
+- A blueprint table where a wizard rolls out a big blank plan sheet.
+- A rubber duck wearing a Santa hat on a desk.
+- A podcast microphone on a desk.
+- A wall of small framed certificates, all blank.
+- One blank poster frame on the wall and one book standing face-out on a shelf with a blank cover.
+- Three elves together: one watching a wizard demonstrate, one building something, one teaching a smaller elf.
+- A 3D printer and a server rack with blinking lights.
+- One blank flat sign board above the fireplace, wide enough for a logo.
+
+Files, 16:9 landscape, highest resolution available:
+1. workshop-hw.png: the full scene.
+2. workshop-hw-magenta.png: an edit of workshop-hw.png (use it as the reference image) that is identical in every pixel except that every screen, the mascot's laptop lid, the sign above the fireplace, every blank gift tag, label, plaque, the spellbook pages, the poster frame, the book cover and the certificates are filled solid pure magenta #FF00FF, flat, with hard edges.

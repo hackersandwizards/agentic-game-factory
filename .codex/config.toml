@@ -1,0 +1,27 @@
+# Codex reads this file once you trust the folder; your own ~/.codex/config.toml sets everything else.
+
+# One model and effort for every session here. GPT-6.2 Sol is on the Plus, Pro, Business, Enterprise
+# and Edu plans; on another plan or an API key without it, pick yours with /model or delete the line.
+model = "gpt-6.2-sol"
+model_reasoning_effort = "medium"
+plan_mode_reasoning_effort = "high"
+
+# game-wizard reads the pages it cites, which the default cached search index cannot open.
+web_search = "live"
+
+# The same headless Chrome DevTools server as .mcp.json, for Codex: your agent sees and measures the game.
+[mcp_servers.chrome-devtools]
+command = "bun"
+args = [
+  "-i",
+  "-e",
+  "import{detectBrowserPlatform as d,getInstalledBrowsers as g,install as i,resolveBuildId as r}from'@puppeteer/browsers';import{spawn}from'node:child_process';import{homedir}from'node:os';import{join}from'node:path';const c=process.env.PUPPETEER_CACHE_DIR??join(homedir(),'.cache','puppeteer'),p=d(),b=(await g({cacheDir:c})).filter(function(x){return x.browser=='chrome'}).filter(function(x){return x.platform==p}).sort(function(x,y){return x.buildId.localeCompare(y.buildId,'en',{numeric:true})}).at(-1)??await i({browser:'chrome',buildId:await r('chrome',p,'stable'),cacheDir:c}),m=spawn(process.execPath,['x',...process.argv.slice(1),'--executablePath',b.executablePath],{stdio:'inherit'});for(const s of['SIGINT','SIGTERM'])process.on(s,function(){m.kill(s)});m.on('exit',function(n){process.exit(n??1)})",
+  "chrome-devtools-mcp@1.13.0",
+  "--headless",
+  "--isolated",
+  "--viewport=1280x720",
+  "--no-usage-statistics",
+  "--no-performance-crux",
+]
+# The first start downloads Chrome for Testing, about 200 MB.
+startup_timeout_sec = 180

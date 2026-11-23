@@ -1,0 +1,3070 @@
+<!doctype html>
+<html
+  lang="de"
+  data-composition-variables='[{"id":"language","type":"enum","label":"Language","default":"de","options":[{"value":"de","label":"Deutsch"},{"value":"en","label":"English"}],"description":"The film’s language: the engine’s own words, and with en every variable left at its default takes its English default (defaultEn). The customer’s own texts are written in it."},{"id":"customerName","type":"string","label":"Customer name","default":"Kunde","description":"Company the greeting addresses, shown on the title card; empty greets without a name.","defaultEn":"Customer"},{"id":"title","type":"string","label":"Title","default":"Quest-Log 2026","defaultEn":"Quest Log 2026"},{"id":"hubImage","type":"string","label":"Workshop image","default":"","description":"The composed workshop picture, a path in the customers folder (<customer>/workshop.png, written by scripts/workshop.mjs compose); empty shows the bare base."},{"id":"hubMask","type":"string","label":"Workshop magenta variant","default":"","description":"The workshop picture with every blank filled #FF00FF, a path in the customers folder; overlays are clipped to those pixels."},{"id":"hubLayout","type":"string","label":"Workshop overlay layout","default":"{\"points\":{\"portal\":[850,190],\"crystal\":[851,322]},\"quiet\":[],\"slots\":[{\"kind\":\"belt\",\"x\":460,\"y\":636,\"w\":827,\"h\":86,\"speed\":20,\"layer\":[470,600]},{\"kind\":\"window\",\"x\":140,\"y\":55,\"w\":340,\"h\":400},{\"kind\":\"logo\",\"x\":528,\"y\":126,\"w\":209,\"h\":109},{\"kind\":\"board\",\"x\":1248,\"y\":63,\"w\":271,\"h\":92},{\"kind\":\"label\",\"text\":\"Agents\\nat work\",\"x\":1214,\"y\":235,\"w\":65,\"h\":43},{\"kind\":\"doorsign\",\"x\":1518,\"y\":205,\"w\":132,\"h\":52},{\"kind\":\"logo\",\"src\":\"hw\",\"x\":811,\"y\":480,\"w\":84,\"h\":56,\"quad\":[[826,480],[908,479],[896,535],[811,535]]},{\"kind\":\"tag\",\"x\":502,\"y\":678,\"w\":88,\"h\":34},{\"kind\":\"tag\",\"x\":660,\"y\":678,\"w\":88,\"h\":34},{\"kind\":\"tag\",\"x\":811,\"y\":678,\"w\":88,\"h\":34},{\"kind\":\"tag\",\"x\":966,\"y\":678,\"w\":88,\"h\":34},{\"kind\":\"tag\",\"x\":1131,\"y\":678,\"w\":88,\"h\":34},{\"kind\":\"anchor\",\"x\":134,\"y\":504,\"w\":75,\"h\":51,\"callout\":true}]}","description":"JSON, written by scripts/workshop.mjs compose from greeting/slots.json: overlay slots in image pixels, named points (portal, crystal, crown) and quiet boxes."},{"id":"slots","type":"string","label":"Workshop slot fills","default":"{}","description":"JSON, read only by scripts/workshop.mjs compose: per slot of greeting/slots.json a painted fill (paint, a PNG in the customers folder), its text and extra overlays."},{"id":"customerLogo","type":"string","label":"Customer logo","default":"","description":"Logo file for the sign above the fireplace, a path in the customers folder; empty shows the h&w logo."},{"id":"teams","type":"string","label":"Gift-tag team names","default":"Team","description":"Gift-tag texts separated by |, one per gift on the belt in order (five gifts); with fewer teams the remaining gifts carry no tag. A text too long for its tag stops the render."},{"id":"screenScript","type":"string","label":"Screen session lines","default":"> claude --permission-mode plan|> Plane die Quests für 2026|✓ Plan: {quests} Quests, {places} Orte|✓ Plan freigegeben","description":"Lines typed on the workshop screens, separated by |, at most four; a leading ✓ draws a check mark; {places}, {quests} and {stops} count the customer data. Keep them true to the tool: plan mode only plans, so anything run or tested comes after a line approving the plan.","defaultEn":"> claude --permission-mode plan|> Plan the quests for 2026|✓ Plan: {quests} quests, {places} places|✓ Plan approved"},{"id":"questLog","type":"string","label":"Quest log","default":"01.12. Agentic Engineering","description":"Map panel: one entry per dated quest in date order, separated by |: date, space, quest, and \", Place\" when it happened at a place in places. Entries group by place; the wizard walks them in this order."},{"id":"asOf","type":"string","label":"As-of date","default":"2026-12-15","description":"YYYY-MM-DD, the send date: every quest dated on or before it shows as done."},{"id":"places","type":"string","label":"Map places","default":"","description":"Places on the map, separated by |, each Name@lat,lon. Quest log entries ending in \", Name\" walk there."},{"id":"stop1Place","type":"string","label":"Stop 1: place","default":"Hamburg","description":"Room name, a location; leave empty to drop the stop. Stops play in order 1-4, in date order."},{"id":"stop1Landmark","type":"string","label":"Stop 1: landmark","default":"harbor","description":"A painted backdrop: harbor, city or alps (assets/backdrops/<key>.png), or a .png path in the customers folder; A+B plays a room in two places as two beats (place \"A & B\"), trainer 1 in the first and trainer 2 in the second."},{"id":"stop1Quest","type":"string","label":"Stop 1: quests (room header)","default":"Agentic Engineering","description":"Quests in date order, separated by \" · \", one line each in the room header."},{"id":"stop1Npc1","type":"string","label":"Stop 1: trainer 1","default":"hackers&wizards"},{"id":"stop1Npc2","type":"string","label":"Stop 1: trainer 2","default":"","description":"Optional second trainer."},{"id":"stop1Line","type":"string","label":"Stop 1: trainer line","default":"Danke für ein starkes Jahr!","description":"What trainer 1 says, one short sentence; every stop needs one (the render stops otherwise).","defaultEn":"Thanks for a great year!"},{"id":"stop1Line2","type":"string","label":"Stop 1: trainer 2 line","default":"","description":"What trainer 2 says in the second place of a room in two places (A+B landmark, two trainers), one short sentence; such a room needs it (the render stops otherwise)."},{"id":"stop2Place","type":"string","label":"Stop 2: place","default":"","description":"Room name, a location; leave empty to drop the stop. Stops play in order 1-4, in date order."},{"id":"stop2Landmark","type":"string","label":"Stop 2: landmark","default":"city","description":"A painted backdrop: harbor, city or alps (assets/backdrops/<key>.png), or a .png path in the customers folder; A+B plays a room in two places as two beats (place \"A & B\"), trainer 1 in the first and trainer 2 in the second."},{"id":"stop2Quest","type":"string","label":"Stop 2: quests (room header)","default":"","description":"Quests in date order, separated by \" · \", one line each in the room header."},{"id":"stop2Npc1","type":"string","label":"Stop 2: trainer 1","default":""},{"id":"stop2Npc2","type":"string","label":"Stop 2: trainer 2","default":"","description":"Optional second trainer."},{"id":"stop2Line","type":"string","label":"Stop 2: trainer line","default":"","description":"What trainer 1 says, one short sentence; every stop needs one (the render stops otherwise)."},{"id":"stop2Line2","type":"string","label":"Stop 2: trainer 2 line","default":"","description":"What trainer 2 says in the second place of a room in two places (A+B landmark, two trainers), one short sentence; such a room needs it (the render stops otherwise)."},{"id":"stop3Place","type":"string","label":"Stop 3: place","default":"","description":"Room name, a location; leave empty to drop the stop. Stops play in order 1-4, in date order."},{"id":"stop3Landmark","type":"string","label":"Stop 3: landmark","default":"city","description":"A painted backdrop: harbor, city or alps (assets/backdrops/<key>.png), or a .png path in the customers folder; A+B plays a room in two places as two beats (place \"A & B\"), trainer 1 in the first and trainer 2 in the second."},{"id":"stop3Quest","type":"string","label":"Stop 3: quests (room header)","default":"","description":"Quests in date order, separated by \" · \", one line each in the room header."},{"id":"stop3Npc1","type":"string","label":"Stop 3: trainer 1","default":""},{"id":"stop3Npc2","type":"string","label":"Stop 3: trainer 2","default":"","description":"Optional second trainer."},{"id":"stop3Line","type":"string","label":"Stop 3: trainer line","default":"","description":"What trainer 1 says, one short sentence; every stop needs one (the render stops otherwise)."},{"id":"stop3Line2","type":"string","label":"Stop 3: trainer 2 line","default":"","description":"What trainer 2 says in the second place of a room in two places (A+B landmark, two trainers), one short sentence; such a room needs it (the render stops otherwise)."},{"id":"stop4Place","type":"string","label":"Stop 4: place","default":"","description":"Room name, a location; leave empty to drop the stop. Stops play in order 1-4, in date order."},{"id":"stop4Landmark","type":"string","label":"Stop 4: landmark","default":"city","description":"A painted backdrop: harbor, city or alps (assets/backdrops/<key>.png), or a .png path in the customers folder; A+B plays a room in two places as two beats (place \"A & B\"), trainer 1 in the first and trainer 2 in the second."},{"id":"stop4Quest","type":"string","label":"Stop 4: quests (room header)","default":"","description":"Quests in date order, separated by \" · \", one line each in the room header."},{"id":"stop4Npc1","type":"string","label":"Stop 4: trainer 1","default":""},{"id":"stop4Npc2","type":"string","label":"Stop 4: trainer 2","default":"","description":"Optional second trainer."},{"id":"stop4Line","type":"string","label":"Stop 4: trainer line","default":"","description":"What trainer 1 says, one short sentence; every stop needs one (the render stops otherwise)."},{"id":"stop4Line2","type":"string","label":"Stop 4: trainer 2 line","default":"","description":"What trainer 2 says in the second place of a room in two places (A+B landmark, two trainers), one short sentence; such a room needs it (the render stops otherwise)."},{"id":"side1Name","type":"string","label":"Map side node 1: name","default":"","description":"Optional place on the map off the walked path; empty hides it."},{"id":"side1Lat","type":"number","label":"Side node 1: latitude","default":0,"min":-90,"max":90},{"id":"side1Lon","type":"number","label":"Side node 1: longitude","default":0,"min":-180,"max":180},{"id":"side1Label","type":"string","label":"Side node 1: caption","default":"","description":"Shown in brackets after the name."},{"id":"side2Name","type":"string","label":"Map side node 2: name","default":"","description":"Optional place on the map off the walked path; empty hides it."},{"id":"side2Lat","type":"number","label":"Side node 2: latitude","default":0,"min":-90,"max":90},{"id":"side2Lon","type":"number","label":"Side node 2: longitude","default":0,"min":-180,"max":180},{"id":"side2Label","type":"string","label":"Side node 2: caption","default":"","description":"Shown in brackets after the name."},{"id":"trainerLooks","type":"string","label":"Trainer looks","default":"hackers&wizards=9","description":"Every trainer named in a stop needs one (the render stops otherwise): Name=look pairs separated by |, a look 0-13 from assets/sprites/people.png, matched to the trainer: men 1 beard and glasses, 3 purple jacket, 5 bald with beard, 6 orange sweater, 8 dark beard and grey hoodie, 9 side-parted hair and blazer, 10 long hair in a bun and full beard, 11 slicked-back hair and teal t-shirt, 12 short hair, glasses and turtleneck, 13 East Asian, short black hair and olive overshirt; women 0 teal hoodie, 2 mustard cardigan, 4 red scarf, 7 denim jacket. No two trainers of a customer share a look."},{"id":"eggs","type":"string","label":"Easter eggs","default":"[]","description":"JSON list, each egg in one room (1-4) with its art, a sprite (frames side by side, 3 art pixels per unit) in the customers folder: {kind: walker, room, art} sweeps the floor left of the hero (2 frames); {kind: visitor, room, art, tag, line} stands left of the hero with a ground tag and a short bubble (2 frames: knocking, standing); {kind: crosser, room, art} cartwheels there and back on the floor left of the hero, a quarter turn per step, in a room without a walker (in a room of two places, in the second) (1 frame); {kind: prop, room, art, x, frames?} stands on the floor centred at x units, animated at 8 frames a second (4 frames unless frames says otherwise). One walker, visitor and crosser each; any number of props."},{"id":"bossArt","type":"string","label":"Boss art","default":"monolith","description":"monolith (the factory’s server cabinet, throws printouts), or JSON for a boss in the customers folder: {dir (menacing.png and friendly.png, 324x324 art pixels), face, display, from (units in the sprite), thrown, lands (sprite paths), gifts (sprite paths it hands out once friendly), knead, blink, steam (its friendly idle), friendly (true: never fought: menacing until the wizard’s first scan turns it friendly, no attacks), readout: {text, color} (a reading on its display)}."},{"id":"bossName","type":"string","label":"Boss name","default":"Der Legacy-Monolith","defaultEn":"The Legacy Monolith"},{"id":"bossLine","type":"string","label":"Boss line","default":"Ich war nie böse, nur schlecht dokumentiert.","defaultEn":"I was never evil, just badly documented."},{"id":"doorTitle","type":"string","label":"Door sign","default":"Level 2027","description":"Sign above the door in the customer workshop."},{"id":"kitUrl","type":"string","label":"Kit URL","default":"https://hackersandwizards.github.io/agentic-game-factory/examples/present/","description":"Link to the kit, encoded in the QR code on the title strip."},{"id":"greeting","type":"string","label":"Closing greeting","default":"Frohe Weihnachten, danke für 2026!","defaultEn":"Merry Christmas and thank you for 2026!"},{"id":"kitLine","type":"string","label":"Kit invitation","default":"Agentic Game Factory: erst spielen, dann euer eigenes Spiel bauen","description":"One line on the end card saying what the QR code on the title strip opens.","defaultEn":"Agentic Game Factory: play first, then build your own game"},{"id":"scanLine","type":"string","label":"QR call","default":"QR SCANNEN & SPIELEN","description":"Bottom line of the title strip, beside the QR code it calls to, from the end card to the last frame, in the language of the customer.","defaultEn":"SCAN THE QR CODE & PLAY"},{"id":"nod","type":"string","label":"Personal nod","default":"","description":"One short personal line on the end card, under the greeting; empty hides it."}]'
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <script src="assets/vendor/brand.js"></script>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <script src="assets/vendor/qrcode.js"></script>
+    <script src="rooms.js"></script>
+    <style>
+      @font-face {
+        font-family: "Press Start 2P";
+        src: url("assets/vendor/press-start-2p-latin-400-normal.woff2") format("woff2");
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--night);
+      }
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+      }
+      #stage {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        image-rendering: pixelated;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="78.15"
+      data-width="1920"
+      data-height="1080"
+    >
+      <canvas
+        id="stage"
+        class="clip"
+        data-start="0"
+        data-duration="78.15"
+        data-track-index="0"
+        width="1920"
+        height="1080"
+      ></canvas>
+      <!-- score and effects for the customer rendered last: scripts/score.mjs -->
+      <audio
+        id="score"
+        src="assets/audio/score.wav"
+        data-start="0"
+        data-duration="78.15"
+        data-track-index="1"
+        data-volume="1"
+      ></audio>
+    </div>
+    <script>
+      // The whole film is one pixel canvas redrawn from timeline time alone (draw(t)).
+      // Two grids. Layout: 320x180 units of 6x6 screen pixels (PX); every position, size and
+      // cue below is in units. Art: 960x540 art pixels of 2x2 screen pixels (AP), the game's
+      // level grid: every painted image is drawn one image pixel per art pixel, and every
+      // position and code-drawn pixel snaps to the art grid. All text is the pixel font, drawn
+      // at its native 8 px and scaled up without smoothing.
+      (() => {
+        // Story time: every cue, hold and camera move below is in it; the frame clock runs PACE
+        // times longer (the score's tempo follows: scripts/score.mjs). Every animation rate
+        // (sprite frames, walks, snow, flicker, typing, blink, sparks, an effect's own duration)
+        // runs on the frame clock instead: real(t) seconds, or elapsed story time times PACE. A
+        // walk keeps its pace and idles at its goal for the longer hold.
+        const DUR = 52.1;
+        const PACE = 1.5;
+        const real = (t) => t * PACE;
+        const PX = 6;
+        const AP = 2;
+        // art pixels per unit
+        const K = PX / AP;
+        // a unit coordinate snapped to the art grid, in screen pixels
+        const snapA = (v) => Math.round(v * K) * AP;
+        const W = 320;
+        const H = 180;
+        const FLOOR = 140;
+        // the rooms' timing, shared with scripts/score.mjs (rooms.js)
+        const { BEAT, START: ROOMS_START, END: ROOMS_END, EXTRA } = ROOMS;
+        // workshop, map, rooms, boss, back to the workshop (ends on the game's title screen)
+        const CUTS = [8.6, ROOMS_START, ROOMS_END, 37.8];
+        const WIPES = [CUTS[1], CUTS[2]];
+        // the variables; in English, every one left at its German default takes its English one
+        const V = { ...window.__hyperframes.getVariables() };
+        // screen pixels every label keeps from the frame's left and right edges (title-safe)
+        const SAFE = 96;
+        const EN = V.language === "en";
+        if (EN)
+          for (const v of JSON.parse(document.documentElement.dataset.compositionVariables))
+            if (v.defaultEn !== undefined && V[v.id] === v.default) V[v.id] = v.defaultEn;
+        // the engine's own words
+        const WORDS = EN
+          ? {
+              map: "World map 2026",
+              log: "Quest Log",
+              friend: "New friend",
+              friendship: "Friendship",
+              boss: "Boss",
+              hello: "Merry Christmas",
+            }
+          : {
+              map: "Weltkarte 2026",
+              log: "Quest-Log",
+              friend: "Neuer Freund",
+              friendship: "Freundschaft",
+              boss: "Endgegner",
+              hello: "Frohe Weihnachten",
+            };
+        // customer files: the customers folder, linked as customer/ by `bun run greeting`
+        // a customer's file, inside the customers folder: a relative path of letters, digits, ".",
+        // "_", "-" and "/" without a ".." segment, since Chrome reads a backslash as "/" and decodes
+        // "%2e%2e" to ".."
+        const CUST = (p) => {
+          if (!/^[\w.-][\w./-]*$/.test(p) || /(^|\/)\.\.(\/|$)/.test(p))
+            throw new Error(`path outside the customers folder: ${p}`);
+          return `customer/${p}`;
+        };
+        // h&w's colours from brand.js (the repo's brand.json), and the film's own snow and stone
+        const COL = { ...BRAND, snow: "#EEF3F7", stone2: "#2A3F55", stone3: "#3B5570" };
+        const PIXEL = '"Press Start 2P", monospace';
+        const canvas = document.getElementById("stage");
+        let ctx = canvas.getContext("2d");
+
+        // ---------- data ----------
+        const stops = [1, 2, 3, 4]
+          .map((i) => ({
+            place: V[`stop${i}Place`],
+            landmark: V[`stop${i}Landmark`],
+            quest: V[`stop${i}Quest`].split(" · ").filter(Boolean),
+            npcs: [V[`stop${i}Npc1`], V[`stop${i}Npc2`]].filter(Boolean),
+            line: V[`stop${i}Line`],
+            line2: V[`stop${i}Line2`],
+          }))
+          .filter((s) => s.place);
+        const sides = [1, 2]
+          .map((i) => ({
+            name: V[`side${i}Name`],
+            lat: V[`side${i}Lat`],
+            lon: V[`side${i}Lon`],
+            label: V[`side${i}Label`],
+          }))
+          .filter((s) => s.name);
+        // the customer's easter eggs, r its room's index: one walker, visitor and crosser at most,
+        // any number of props
+        const EGG_LIST = JSON.parse(V.eggs || "[]").map((e) => ({ ...e, r: e.room - 1 }));
+        const EGG = Object.fromEntries(
+          ["walker", "visitor", "crosser"].map((k) => [k, EGG_LIST.find((e) => e.kind === k) ?? null]),
+        );
+        const PROPS = EGG_LIST.filter((e) => e.kind === "prop");
+        // the boss: the factory's monolith, or a customer's boss described in JSON
+        const BOSS_SET = V.bossArt.startsWith("{") ? JSON.parse(V.bossArt) : null;
+        const PLACES = V.places
+          .split("|")
+          .filter(Boolean)
+          .map((p) => {
+            const [name, ll] = p.split("@");
+            const [lat, lon] = ll.split(",").map(Number);
+            return { name, lat, lon, kind: "stop" };
+          });
+        // "DD.MM. Quest, Place": the place is a map node when places names it
+        const QUESTS = V.questLog
+          .split("|")
+          .filter(Boolean)
+          .map((q) => {
+            const sp = q.indexOf(" ");
+            const rest = q.slice(sp + 1);
+            const cut = rest.lastIndexOf(", ");
+            const node = PLACES.find((p) => p.name === rest.slice(cut + 2));
+            return {
+              date: q.slice(0, sp),
+              group: cut >= 0 && node ? node.name : rest,
+              node: cut >= 0 ? node : undefined,
+            };
+          });
+        // a quest dated on or before asOf (the send date) is done; dates carry no year
+        const [, AS_M, AS_D] = V.asOf.split("-").map(Number);
+        const MONTHS = "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(" ");
+        QUESTS.forEach((q) => {
+          const [dd, mm, rest] = q.date.split(".");
+          const [d, m] = [Number(dd), Number(mm)];
+          if (!/^\d\d$/.test(dd) || !/^\d\d$/.test(mm) || rest !== "" || d < 1 || d > 31 || m < 1 || m > 12)
+            throw new Error(`quest log entry without a DD.MM. date: ${q.date}`);
+          q.past = m < AS_M || (m === AS_M && d <= AS_D);
+          // the log shows an English film's dates as "12 Mar"
+          if (EN) q.date = `${d} ${MONTHS[m - 1]}`;
+        });
+        const N = Math.max(1, stops.length);
+        // a room in two places with two trainers ("A+B" landmark) plays two beats, each trainer
+        // with a line; any other room with two trainers shows them side by side
+        const twoBeats = (s) => s.landmark.includes("+") && s.npcs.length > 1;
+        const sideBySide = (s) => s.npcs.length > 1 && !twoBeats(s);
+        const ROOM_T0 = ROOMS.t0(stops.map(twoBeats));
+
+        // ---------- primitives ----------
+        const hash = (i) => {
+          let x = Math.imul((i | 0) ^ 0x9e3779b9, 0x85ebca6b);
+          x ^= x >>> 13;
+          x = Math.imul(x, 0xc2b2ae35);
+          x ^= x >>> 16;
+          return (x >>> 0) / 4294967296;
+        };
+        const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+        const lerp = (a, b, p) => a + (b - a) * p;
+        const ease = (p) => {
+          p = clamp(p);
+          return p * p * (3 - 2 * p);
+        };
+        // in units, snapped to the art grid
+        const rect = (x, y, w, h, c, a = 1) => {
+          ctx.globalAlpha = a;
+          ctx.fillStyle = c;
+          const X = Math.round(x * K);
+          const Y = Math.round(y * K);
+          ctx.fillRect(
+            X * AP,
+            Y * AP,
+            (Math.round((x + w) * K) - X) * AP,
+            (Math.round((y + h) * K) - Y) * AP,
+          );
+          ctx.globalAlpha = 1;
+        };
+        // a disc of radius r units, one art pixel per row
+        const disc = (cx, cy, r, c, a = 1) => {
+          const R = Math.round(r * K);
+          for (let dy = -R; dy <= R; dy++) {
+            const hw = Math.floor(Math.sqrt(R * R - dy * dy));
+            rect(cx - hw / K, cy + dy / K, (hw * 2 + 1) / K, 1 / K, c, a);
+          }
+        };
+        // ---------- pixel lettering ----------
+        // Film text is Press Start 2P at its native 8 px, never smoothed: unambiguous W, V, M and
+        // O and real umlauts.
+        // Lettering on the workshop picture: 5 rows, proportional, so M, V, W and O never read as
+        // H, U or V; drawn on a half-cell grid where the cell grid is too coarse.
+        const SMALL = {
+          A: ".##./#..#/####/#..#/#..#",
+          B: "###./#..#/###./#..#/###.",
+          C: ".###/#.../#.../#.../.###",
+          D: "###./#..#/#..#/#..#/###.",
+          E: "####/#.../###./#.../####",
+          F: "####/#.../###./#.../#...",
+          G: ".###/#.../#.##/#..#/.###",
+          H: "#..#/#..#/####/#..#/#..#",
+          I: "###/.#./.#./.#./###",
+          J: "...#/...#/...#/#..#/.##.",
+          K: "#..#/#.#./##../#.#./#..#",
+          L: "#.../#.../#.../#.../####",
+          M: "#...#/##.##/#.#.#/#...#/#...#",
+          N: "#..#/##.#/#.##/#..#/#..#",
+          O: ".##./#..#/#..#/#..#/.##.",
+          P: "###./#..#/###./#.../#...",
+          Q: ".##./#..#/#..#/#.#./.#.#",
+          R: "###./#..#/###./#.#./#..#",
+          S: ".###/#.../.##./...#/###.",
+          T: "#####/..#../..#../..#../..#..",
+          U: "#..#/#..#/#..#/#..#/.##.",
+          V: "#...#/#...#/.#.#./.#.#./..#..",
+          W: "#...#/#...#/#.#.#/##.##/#...#",
+          X: "#...#/.#.#./..#../.#.#./#...#",
+          Y: "#...#/.#.#./..#../..#../..#..",
+          Z: "####/...#/.##./#.../####",
+          Ä: "#..#/.##./#..#/####/#..#/#..#",
+          Ö: "#..#/.##./#..#/#..#/#..#/.##.",
+          Ü: "#..#/..../#..#/#..#/#..#/.##.",
+          ß: "###./#..#/#.#./#..#/#.#.",
+          0: ".##./#.##/##.#/#..#/.##.",
+          1: ".#./##./.#./.#./###",
+          2: "###./...#/.##./#.../####",
+          3: "###./...#/.##./...#/###.",
+          4: "#..#/#..#/####/...#/...#",
+          5: "####/#.../###./...#/###.",
+          6: ".##./#.../###./#..#/.##.",
+          7: "####/...#/..#./.#../.#..",
+          8: ".##./#..#/.##./#..#/.##.",
+          9: ".##./#..#/.###/...#/.##.",
+          ".": "././././#",
+          ",": "./././#/#",
+          ":": "./#/./#/.",
+          "-": ".../.../###/.../...",
+          "–": "..../..../####/..../....",
+          "&": ".#../#.#./.#../#.##/.#.#",
+          "'": "#/#/././.",
+          "!": "#/#/#/./#",
+          "?": "###./...#/.##./..../.#..",
+          "/": "..#/..#/.#./#../#..",
+          "(": ".#/#./#./#./.#",
+          ")": "#./.#/.#/.#/#.",
+          "·": "././#/./.",
+          "%": "#..#/...#/..#./.#../#..#",
+          "+": ".../.#./###/.#./...",
+          ">": "#../.#./..#/.#./#..",
+          "<": "..#/.#./#../.#./..#",
+          "=": ".../###/.../###/...",
+          "✓": "....#/...#./#.#../.#.../.....",
+          "…": "...../...../...../...../#.#.#",
+          " ": "././././.",
+        };
+        // the h&w mark's own lower case
+        const MARK = {
+          h: "#.../#.../###./#..#/#..#",
+          w: "...../#...#/#.#.#/#.#.#/.#.#.",
+        };
+        const smallRows = (ch, font = {}) => (font[ch] ?? SMALL[ch.toUpperCase()] ?? SMALL["?"]).split("/");
+        const smallW = (s, font) =>
+          Math.max(0, [...s].reduce((a, ch) => a + smallRows(ch, font)[0].length + 1, 0) - 1);
+        // s at (x, y) top-left in pixels of g, k pixels per font pixel
+        const smallText = (g, s, x, y, color, k = 1, font) => {
+          g.fillStyle = color;
+          for (const ch of s) {
+            const rows = smallRows(ch, font);
+            // a glyph taller than five rows (an umlaut) starts above the cap line
+            const up = Math.max(0, rows.length - 5);
+            rows.forEach((r, j) =>
+              [...r].forEach((b, i) => b === "#" && g.fillRect(x + i * k, y + (j - up) * k, k, k)),
+            );
+            x += (rows[0].length + 1) * k;
+          }
+        };
+        // greedy line breaking: each part joins the last line, with sep, while fits(line) holds
+        const breakLines = (parts, sep, fits) => {
+          const out = [];
+          for (const p of parts) {
+            const last = out.length - 1;
+            if (last >= 0 && fits(out[last] + sep + p)) out[last] += sep + p;
+            else out.push(p);
+          }
+          return out;
+        };
+        const smallWrap = (s, maxW) =>
+          s
+            .split("\n")
+            .flatMap((p) => breakLines(p.split(" "), " ", (l) => smallW(l) <= maxW).filter(Boolean));
+        // A string drawn one font pixel per canvas pixel, cached per font, string and colour.
+        const glyphCache = new Map();
+        // glyphs Press Start 2P lacks, 8 wide like the rest
+        const OWN = {
+          "✓": ["........", ".......#", "......##", "#....##.", "##..##..", ".####...", "..##...."],
+          "→": ["........", "....#...", "....##..", "#######.", "#######.", "....##..", "....#..."],
+        };
+        const glyphs = (s, color) => {
+          const key = `${color}|${s}`;
+          let c = glyphCache.get(key);
+          if (c) return c;
+          c = document.createElement("canvas");
+          const g = c.getContext("2d", { willReadFrequently: true });
+          c.width = Math.max(1, measureCells(s));
+          c.height = 9;
+          g.font = `8px ${PIXEL}`;
+          g.textBaseline = "top";
+          g.fillStyle = color;
+          [...s].forEach((ch, n) => {
+            const own = OWN[ch];
+            if (own)
+              own.forEach((r, j) =>
+                [...r].forEach((b, i) => b === "#" && g.fillRect(n * 8 + i, j + 1, 1, 1)),
+              );
+            else g.fillText(ch, n * 8, 1);
+          });
+          const im = g.getImageData(0, 0, c.width, c.height);
+          for (let i = 3; i < im.data.length; i += 4) im.data[i] = im.data[i] > 100 ? 255 : 0;
+          g.putImageData(im, 0, 0);
+          glyphCache.set(key, c);
+          return c;
+        };
+        // width in font pixels: Press Start 2P is 8 wide per character
+        const measureCells = (s) => [...s].length * 8;
+        // screen pixels per font pixel by size: 48 the layout grid, 40 five, the rest four, so the
+        // smallest running text still reads on an upright phone (32 px glyphs)
+        const kOf = (size) => (size >= 48 ? PX : size >= 40 ? 5 : 4);
+        const measure = (s, size, k = kOf(size)) => measureCells(s) * k;
+        // Text in screen pixels, y the baseline. reveal: characters shown (layout stays put).
+        // the opacity of every text, plate and bubble tail: a transition fades them, so no line of
+        // text is ever cut by a transition's edge
+        let UI_A = 1;
+        const txt = (s, x, y, o = {}) => {
+          const k = o.k ?? kOf(o.size ?? 32);
+          const full = measure(s, o.size ?? 32, k);
+          const snap = (v) => Math.round(v / k) * k;
+          const x0 = snap(o.align === "center" ? x - full / 2 : o.align === "right" ? x - full : x);
+          const y0 = snap(y) - 9 * k;
+          const shown = o.reveal === undefined ? s : s.slice(0, Math.max(0, o.reveal));
+          if (!shown) return full;
+          ctx.save();
+          ctx.globalAlpha = (o.alpha ?? 1) * UI_A;
+          ctx.imageSmoothingEnabled = false;
+          const draw = (color, d) => {
+            const g = glyphs(shown, color);
+            ctx.drawImage(g, x0 + d, y0 + d, g.width * k, g.height * k);
+          };
+          if (o.shadow !== false) draw(COL.night, k);
+          draw(o.color ?? COL.nightInk, 0);
+          ctx.restore();
+          return full;
+        };
+        const wrap = (s, maxW, size, k = kOf(size)) =>
+          breakLines(s.split(" "), " ", (l) => measure(l, size, k) <= maxW).filter(Boolean);
+        const typed = (t, t0, cps = 36) => Math.floor(real(t - t0) * cps);
+        // Plate on the art grid with chunky corners.
+        const plate = (x, y, w, h, fill, border, bw = PX, a = 1) => {
+          const s = (v) => Math.round(v / PX) * PX;
+          [x, y, w, h] = [s(x), s(y), s(w), s(h)];
+          ctx.globalAlpha = a * UI_A;
+          ctx.fillStyle = border;
+          ctx.fillRect(x + bw, y, w - 2 * bw, h);
+          ctx.fillRect(x, y + bw, w, h - 2 * bw);
+          ctx.fillStyle = fill;
+          ctx.fillRect(x + bw, y + bw, w - 2 * bw, h - 2 * bw);
+          ctx.globalAlpha = 1;
+        };
+        // Every speech bubble's tail: one solid stepped band, w0 wide at the bubble and 12 at
+        // the speaker, from (x0, y0) inside the bubble to (x1, y1); drawn before the bubble.
+        // a speech bubble: 32-size lines on a light plate at bx, by, typed out to `left` characters,
+        // its tail from x0 on the plate's bottom edge to the speaker at x1, y1
+        const bubbleSize = (lines) => [
+          Math.max(...lines.map((l) => measure(l, 32))) + 72,
+          lines.length * 52 + 48,
+        ];
+        const bubble = (lines, bx, by, x0, x1, y1, left) => {
+          const [bw, bh] = bubbleSize(lines);
+          tail(x0, by + bh - 12, x1, y1);
+          plate(bx, by, bw, bh, COL.snow, COL.night, 6);
+          lines.forEach((l, k) => {
+            txt(l, bx + 36, by + 64 + k * 52, { size: 32, color: COL.ink, shadow: false, reveal: left });
+            left -= l.length + 1;
+          });
+        };
+        const tail = (x0, y0, x1, y1, w0 = 30) => {
+          const n = Math.max(1, Math.ceil(Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0)) / PX));
+          const s = (v) => Math.round(v / PX) * PX;
+          ctx.globalAlpha = UI_A;
+          for (const [pad, col] of [
+            [PX, COL.night],
+            [0, COL.snow],
+          ]) {
+            ctx.fillStyle = col;
+            for (let k = 0; k <= n; k++) {
+              const w = s(lerp(w0, 12, k / n));
+              const x = s(lerp(x0, x1, k / n) - w / 2);
+              const y = s(lerp(y0, y1, k / n));
+              ctx.fillRect(x - pad, y - pad, w + 2 * pad, PX + 2 * pad);
+            }
+          }
+          ctx.globalAlpha = 1;
+        };
+        // f drawn at opacity a, whatever alpha its own calls set
+        const faded = (a, f) => {
+          if (a <= 0) return;
+          ctx.save();
+          if (a < 1) ctx.filter = `opacity(${a})`;
+          f();
+          ctx.restore();
+        };
+
+        // ---------- sprites ----------
+        // Painted sprites (assets/sprites/<name>.png, frames side by side): Codex paintings
+        // keyed and reduced to one art pixel per sprite pixel, the backdrops' own detail; frame
+        // sizes below are in units, the files hold three art pixels per unit. The hero is the
+        // painted version of the game kit's hero: same design, higher detail.
+        const SPRITES = {
+          hero: 8, // idle, walk 1-4, cast, hop, cheer; 53x56, feet on the bottom row
+          "hero-map": 5, // idle, walk 1-4, the map token
+          people: 14, // the trainer looks, 34x52 (who is a man and who a woman: trainerLooks)
+          seal: 3, // the map's wax seals: quest done, not yet, a side node; 17x17 and a shadow
+          star: 1,
+          paper: 1,
+          "spark-teal": 1,
+          "spark-purple": 1,
+          burst: 1,
+        };
+        // the customer's sprites, keyed by their path in the customers folder
+        const EGG_FRAMES = { walker: 2, visitor: 2, crosser: 1, prop: 4 };
+        EGG_LIST.forEach((e) => (SPRITES[e.art] = e.frames ?? EGG_FRAMES[e.kind]));
+        if (BOSS_SET)
+          for (const k of [BOSS_SET.thrown, BOSS_SET.lands, ...(BOSS_SET.gifts ?? [])])
+            if (k?.includes("/")) SPRITES[k] = 1;
+        const SP = {};
+        const spriteLoads = Object.entries(SPRITES).map(([k, n]) => {
+          const im = new Image();
+          im.src = k.includes("/") ? CUST(k) : `assets/sprites/${k}.png`;
+          return im.decode().then(() => {
+            const fw = im.width / n;
+            SP[k] = { im, n, fw, fh: im.height, w: fw / K, h: im.height / K };
+          });
+        });
+        // frame f of sprite k, top-left at (x, y) in units
+        const sprite = (k, f, x, y, flip = false, a = 1) => {
+          const S = SP[k];
+          if (!S) return;
+          const X = snapA(x);
+          const Y = snapA(y);
+          ctx.save();
+          ctx.imageSmoothingEnabled = false;
+          ctx.globalAlpha = a;
+          if (flip) {
+            ctx.translate(X + S.fw * AP, Y);
+            ctx.scale(-1, 1);
+          } else ctx.translate(X, Y);
+          ctx.drawImage(S.im, f * S.fw, 0, S.fw, S.fh, 0, 0, S.fw * AP, S.fh * AP);
+          ctx.restore();
+        };
+        // centred on (x, y)
+        const prop = (k, x, y, a = 1) => SP[k] && sprite(k, 0, x - SP[k].w / 2, y - SP[k].h / 2, false, a);
+        const HERO_H = 56;
+        // the crystal at the staff's top in the cast frame, from the frame's top-left
+        const HERO_TIP = [48, 4];
+        // On the art grid: x the frame's left edge, y the floor line.
+        const wizard = (x, y, t, moving, flip = false, air = false, cast = false) =>
+          sprite(
+            "hero",
+            air ? 6 : cast ? 5 : moving ? 1 + (Math.floor(real(t) * 8) % 4) : 0,
+            x,
+            y - HERO_H,
+            flip,
+          );
+        // Trainers: a look from the people sheet per name, from trainerLooks ("Name=look|...",
+        // looks 0-13); the agent that writes the data picks each look, the render never guesses.
+        const NPC_H = 52;
+        const NPC_HEAD = 17;
+        const LOOKS = Object.fromEntries(
+          V.trainerLooks
+            .split("|")
+            .filter(Boolean)
+            .map((e) => e.split("=").map((v) => v.trim()))
+            .map(([n, l]) => [n, /^(\d|1[0-3])$/.test(l ?? "") ? Number(l) : NaN]),
+        );
+        const lookOf = (name) => LOOKS[name];
+        const npc = (x, name) => sprite("people", lookOf(name), x, FLOOR - NPC_H);
+
+        // ---------- scenery ----------
+        const snowfall = (st, n = 120, seed = 0) => {
+          const t = real(st);
+          for (let i = 0; i < n; i++) {
+            const s = i + seed * 1000;
+            const sp = 7 + hash(s + 1) * 12;
+            const y = ((hash(s + 2) * 200 + t * sp) % 200) - 10;
+            const x = hash(s) * 340 - 10 + 3 * Math.sin(t * 0.9 + i);
+            const f = hash(s + 4) > 0.7 ? 1 : 2 / 3;
+            rect(x, y, f, f, COL.snow, 0.55 + 0.45 * hash(s + 3));
+          }
+        };
+        const line = (x0, y0, x1, y1, c, a = 1) => {
+          const n = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0));
+          for (let i = 0; i <= n; i++) rect(lerp(x0, x1, i / n), lerp(y0, y1, i / n), 1, 1, c, a);
+        };
+        // a customer's prop standing on the floor, centred at cx, at 8 frames a second
+        const eggProp = (e, cx, t) => {
+          const S = SP[e.art];
+          if (S) sprite(e.art, Math.floor(real(t) * 8) % S.n, cx - S.w / 2, FLOOR - S.h);
+        };
+        // Painted backdrops per location (assets/backdrops/<key>.png, 960x540 on the art grid,
+        // walkway edge at the floor line): a stop's landmark, "map" and "boss"; a landmark ending
+        // in .png is the customer's own. Every key has a file; a missing one fails the render.
+        const BACKDROP = {};
+        const backdropLoads = [
+          ...new Set([...stops.flatMap((s) => s.landmark.split("+")), "map", "boss"]),
+        ].map((k) => {
+          const im = new Image();
+          im.src = k.endsWith(".png") ? CUST(k) : `assets/backdrops/${k}.png`;
+          return im.decode().then(() => (BACKDROP[k] = im));
+        });
+        const backdrop = (k, x) => {
+          ctx.imageSmoothingEnabled = false;
+          ctx.drawImage(BACKDROP[k], snapA(x), 0, W * PX, H * PX);
+        };
+        const EGGS = {
+          walker(ox, u) {
+            // once the hero stands it walks in from the left edge and sweeps the clear stretch
+            // left of him, back and forth at its own pace, never under the hero, a trainer or a
+            // bubble
+            const k = EGG.walker.art;
+            if (!SP[k]) return;
+            const x0 = ox + 4;
+            const span = heroWait(EGG.walker.r) - 4 - SP[k].w;
+            const d = real(u - (2 * BEAT) / PACE) * 44;
+            if (d < 0) return;
+            const inW = SP[k].w + 4;
+            const p = d < inW ? 0 : ((d - inW) / span) % 2;
+            sprite(
+              k,
+              Math.floor(real(u) * 4) % 2,
+              d < inW ? x0 - inW + d : x0 + span * (p < 1 ? p : 2 - p),
+              FLOOR - SP[k].h,
+              p >= 1,
+            );
+          },
+          visitor(ox, u) {
+            // it stands between the hero's spot and the trainers, its first frame and its second
+            // alternating every 0.6 s; its tag is laid out with the trainers' (roomLabels)
+            const k = EGG.visitor.art;
+            const hx = ox + VISITOR_X;
+            sprite(k, real(u) % 1.2 < 0.6 ? 0 : 1, hx, FLOOR - (SP[k]?.h ?? 0));
+            // a steady bubble while it starts
+            const s = EGG.visitor.line;
+            if (s && u > 0.3 && u < 3.2) {
+              const bw = measure(s, 32) + 64;
+              const headX = (hx + 18) * PX;
+              // it ends half a gap right of its head, the trainer's bubble starts a gap right
+              const bx = clamp(headX - bw / 2, 60, headX + VISITOR_GAP / 2 - bw);
+              // just above its head, level with the trainer's bubble, so its tail stays short
+              const by = (FLOOR - NPC_H - 4) * PX - 84;
+              tail(headX, by + 72, headX, (FLOOR - NPC_H - 2) * PX, 24);
+              plate(bx, by, bw, 84, COL.snow, COL.night, 6);
+              txt(s, bx + 32, by + 58, {
+                size: 32,
+                color: COL.ink,
+                shadow: false,
+                reveal: typed(u, 0.3, 30),
+              });
+            }
+          },
+          crosser(ox, u, t0, t1) {
+            // between t0 and t1 it cartwheels along the floor of the clear stretch left of the
+            // hero, there and back, rolling a quarter turn per quarter of its own girth; it fades in
+            // and out at the stretch's left end, so it is never cut by the frame's edge and never
+            // passes anyone
+            const k = EGG.crosser.art;
+            const S = SP[k];
+            if (!S || u < t0 || u > t1) return;
+            const span = heroWait(EGG.crosser.r) - 8 - S.w;
+            const step = (Math.PI * S.w) / 4;
+            const p = (u - t0) / (t1 - t0);
+            const d = span * (p < 0.5 ? ease(p * 2) : ease(2 - p * 2));
+            const q = ((Math.floor(d / step) % 4) + 4) % 4;
+            const X = snapA(ox + 4 + d);
+            const Y = snapA(FLOOR - S.h);
+            ctx.save();
+            ctx.globalAlpha = clamp(Math.min(u - t0, t1 - u) / 0.2);
+            ctx.imageSmoothingEnabled = false;
+            ctx.translate(X + (S.fw * AP) / 2, Y + (S.fh * AP) / 2);
+            ctx.rotate((q * Math.PI) / 2);
+            ctx.drawImage(S.im, 0, 0, S.fw, S.fh, (-S.fw * AP) / 2, (-S.fh * AP) / 2, S.fw * AP, S.fh * AP);
+            ctx.restore();
+          },
+        };
+
+        // ---------- scenes ----------
+        // Map: places projected from lat/lon at one scale for both axes, so the geography holds,
+        // into the painted map's land below its northern sea, low enough that the hero standing
+        // on the top node stays on the parchment.
+        const MAP = { x0: 30, x1: 150, y0: 72, y1: 144 };
+        // the quest log panel's left edge on the map, in screen pixels
+        const LOG_X = 1150;
+        const mapNodes = (() => {
+          const main = PLACES;
+          const all = [...main, ...sides.map((s) => ({ ...s, kind: "side" }))];
+          if (!all.length) return { main, sides: [] };
+          const k = Math.cos((all.reduce((a, n) => a + n.lat, 0) / all.length) * (Math.PI / 180));
+          const xs = all.map((n) => n.lon * k);
+          const ys = all.map((n) => -n.lat);
+          const [minX, maxX, minY, maxY] = [
+            Math.min(...xs),
+            Math.max(...xs),
+            Math.min(...ys),
+            Math.max(...ys),
+          ];
+          const sc = Math.min(
+            (MAP.x1 - MAP.x0) / Math.max(maxX - minX, 1e-6),
+            (MAP.y1 - MAP.y0) / Math.max(maxY - minY, 1e-6),
+          );
+          all.forEach((n, i) => {
+            n.x = Math.round((MAP.x0 + MAP.x1) / 2 + (xs[i] - (minX + maxX) / 2) * sc);
+            n.y = Math.round((MAP.y0 + MAP.y1) / 2 + (ys[i] - (minY + maxY) / 2) * sc);
+          });
+          // A side node crowding another node moves away from it along their true bearing.
+          const sideNodes = all.filter((n) => n.kind === "side");
+          sideNodes.forEach((s) => {
+            const i = all.indexOf(s);
+            for (let guard = 0; guard < 40; guard++) {
+              const o = all.find((o) => o !== s && Math.abs(o.x - s.x) < 22 && Math.abs(o.y - s.y) < 16);
+              if (!o) break;
+              const j = all.indexOf(o);
+              const dx = xs[i] - xs[j];
+              const dy = ys[i] - ys[j];
+              // on the same spot as the other node: straight up
+              const d = Math.hypot(dx, dy);
+              s.fx = (s.fx ?? s.x) + (d ? dx / d : 0) * 2;
+              s.fy = (s.fy ?? s.y) + (d ? dy / d : -1) * 2;
+              s.x = Math.round(s.fx);
+              s.y = Math.round(s.fy);
+            }
+          });
+          return { main, sides: sideNodes };
+        })();
+        // L-shaped corridor; the elbow goes where no side node sits on the way. A leg walked back
+        // retraces the same corridor, so every route is inked once.
+        const nearSeg = (n, p, q) =>
+          n.x >= Math.min(p[0], q[0]) - 8 &&
+          n.x <= Math.max(p[0], q[0]) + 8 &&
+          n.y >= Math.min(p[1], q[1]) - 8 &&
+          n.y <= Math.max(p[1], q[1]) + 8;
+        const corridor = (a, b) => {
+          const options = [
+            [a.x, a.y],
+            [b.x, a.y],
+            [b.x, b.y],
+          ];
+          const alt = [
+            [a.x, a.y],
+            [a.x, b.y],
+            [b.x, b.y],
+          ];
+          const blocked = (pts) =>
+            mapNodes.sides.some((n) => nearSeg(n, pts[0], pts[1]) || nearSeg(n, pts[1], pts[2]));
+          const [first, second] = Math.abs(b.y - a.y) > Math.abs(b.x - a.x) ? [alt, options] : [options, alt];
+          return blocked(first) && !blocked(second) ? second : first;
+        };
+        // The walk: one leg per quest, in quest-log order; a quest without a place or at the
+        // place the hero stands on is a leg of length zero.
+        const WALK0 = CUTS[0] + 0.5;
+        const WALK1 = WALK0 + 3.0;
+        const SLICE = (WALK1 - WALK0) / Math.max(1, QUESTS.length);
+        const legs = (() => {
+          const out = [];
+          const elbows = new Map();
+          let at = QUESTS.find((q) => q.node)?.node;
+          QUESTS.forEach((q, k) => {
+            const to = q.node ?? at;
+            const segs = [];
+            if (at && to && to !== at) {
+              const key = [at.name, to.name].sort().join("|");
+              const elbow = elbows.get(key) ?? corridor(at, to)[1];
+              elbows.set(key, elbow);
+              const pts = [[at.x, at.y], elbow, [to.x, to.y]];
+              for (let i = 1; i < pts.length; i++)
+                segs.push({
+                  a: pts[i - 1],
+                  b: pts[i],
+                  len: Math.abs(pts[i][0] - pts[i - 1][0]) + Math.abs(pts[i][1] - pts[i - 1][1]),
+                });
+            }
+            const len = segs.reduce((a, s) => a + s.len, 0);
+            out.push({ k, from: at, to, segs, len, t0: WALK0 + k * SLICE });
+            at = to;
+          });
+          return out;
+        })();
+        // progress of a leg: the walk at its own pace (80 % of a slice on the frame clock), then
+        // the hero waits at the place
+        const WALK_D = (SLICE * 0.8) / PACE;
+        const legP = (L, t) => clamp((t - L.t0) / WALK_D);
+        const heroAt = (t) => {
+          let L = legs[0];
+          for (const l of legs) if (t >= l.t0) L = l;
+          if (!L) return null;
+          const at = L.from ?? L.to;
+          if (!L.len) return at ? [at.x, at.y] : null;
+          let d = L.len * ease(legP(L, t));
+          for (const s of L.segs) {
+            if (d <= s.len) {
+              const p = s.len ? d / s.len : 0;
+              return [lerp(s.a[0], s.b[0], p), lerp(s.a[1], s.b[1], p)];
+            }
+            d -= s.len;
+          }
+          return [L.to.x, L.to.y];
+        };
+        // First label position (right, left, below, above) that clears corridors and nodes.
+        const labelSpot = (n) => {
+          const w = measure(n.name, 32);
+          const cx = n.x * PX;
+          const cy = n.y * PX;
+          const spots = [
+            {
+              lx: cx + 72,
+              ly: cy + 16,
+              align: "left",
+              box: [cx + 66, cy - 34, w + 12, 88],
+            },
+            {
+              lx: cx - 60,
+              ly: cy + 16,
+              align: "right",
+              box: [cx - 66 - w, cy - 34, w + 12, 88],
+            },
+            {
+              lx: cx + 6,
+              ly: cy + 100,
+              align: "center",
+              box: [cx + 6 - w / 2, cy + 54, w, 88],
+            },
+            {
+              lx: cx + 6,
+              ly: cy - 84,
+              align: "center",
+              box: [cx + 6 - w / 2, cy - 130, w, 88],
+            },
+          ];
+          const hit = ([x, y, bw, bh], [ox, oy, ow, oh]) =>
+            x < ox + ow && ox < x + bw && y < oy + oh && oy < y + bh;
+          const obstacles = [
+            ...legs.flatMap((L) =>
+              L.segs.map((sg) => [
+                Math.min(sg.a[0], sg.b[0]) * PX - 6,
+                Math.min(sg.a[1], sg.b[1]) * PX - 6,
+                Math.abs(sg.b[0] - sg.a[0]) * PX + 24,
+                Math.abs(sg.b[1] - sg.a[1]) * PX + 24,
+              ]),
+            ),
+            ...mapNodes.main.filter((o) => o !== n).map((o) => [o.x * PX - 48, o.y * PX - 48, 132, 132]),
+            ...mapNodes.sides.map((o) => [o.x * PX - 160, o.y * PX - 110, 320, 140]),
+          ];
+          const inFrame = ([x, y, bw, bh]) => x > 60 && y > 200 && x + bw < 1120 && y + bh < 940;
+          return (
+            spots.find((sp) => inFrame(sp.box) && !obstacles.some((o) => hit(sp.box, o))) ??
+            spots.find((sp) => inFrame(sp.box)) ??
+            spots[0]
+          );
+        };
+        // quest log rows: one per place (or placeless quest), its dates in walking order
+        const GROUPS = [];
+        QUESTS.forEach((q, k) => {
+          let g = GROUPS.find((x) => x.name === q.group);
+          if (!g) GROUPS.push((g = { name: q.group, quests: [] }));
+          g.quests.push(k);
+        });
+        // preview: the map as the portal shows it, without the quest log, which fades in whole
+        // once the map fills the frame
+        function sceneMap(t, preview = false) {
+          backdrop("map", 0);
+          const m = t - CUTS[0];
+          txt(WORDS.map, 96, 136, {
+            size: 48,
+            color: COL.snow,
+            reveal: typed(m, 0.2, 30),
+          });
+          txt(V.customerName, 96, 192, {
+            size: 24,
+            color: COL.nightMuted,
+            alpha: clamp((m - 0.5) * 3),
+          });
+          // the route inked on the parchment: dotted, the walked stretch in dense dark ink
+          const INK = "#2A1E14";
+          const dots = (sg, upto, gap, c, al) => {
+            const n = Math.floor((sg.len * upto) / gap);
+            for (let k = 0; k <= n; k++) {
+              const f = sg.len ? (k * gap) / sg.len : 0;
+              rect(lerp(sg.a[0], sg.b[0], f) + 1 / 3, lerp(sg.a[1], sg.b[1], f) + 1 / 3, 4 / 3, 4 / 3, c, al);
+            }
+          };
+          legs.forEach((L) => L.segs.forEach((sg) => dots(sg, 1, 6, INK, 0.45)));
+          legs.forEach((L) => {
+            let d = L.len * ease(legP(L, t));
+            L.segs.forEach((sg) => {
+              const done = clamp(d / Math.max(sg.len, 1));
+              d -= sg.len;
+              if (done > 0) dots(sg, done, 3, INK, 1);
+            });
+          });
+          // side nodes light up early
+          mapNodes.sides.forEach((s, i) => {
+            const on = m > 1.0 + i * 0.6;
+            // a violet seal, pressed once named
+            if (on) sprite("seal", 2, s.x - 8, s.y - 8);
+            if (on) {
+              const a = clamp((m - 1.0 - i * 0.6) * 4);
+              // name and caption on one line right of the seal, 24 px clear of the quest log; where
+              // that does not fit, name over caption at three screen pixels per font pixel
+              const t = s.label ? `${s.name} (${s.label})` : s.name;
+              const x = (s.x + 11) * PX;
+              const o = { color: COL.snow, alpha: a };
+              if (x + measure(t, 24) <= LOG_X - 24) txt(t, x, s.y * PX + 2, { ...o, size: 24 });
+              else {
+                txt(s.name, x, s.y * PX - 4, { ...o, k: 3 });
+                if (s.label) txt(`(${s.label})`, x, s.y * PX + 30, { ...o, k: 3 });
+              }
+            }
+          });
+          // place nodes are wax seals, red where a quest there is done by asOf, the same dates
+          // that tick the quest log and fill the room headers
+          mapNodes.main.forEach((n) => {
+            const lit =
+              m >= 0.4 && GROUPS.some((g) => g.name === n.name && g.quests.some((k) => QUESTS[k].past));
+            sprite("seal", lit ? 0 : 1, n.x - 8, n.y - 8);
+            if (lit) {
+              const { lx, ly, align } = labelSpot(n);
+              txt(n.name, lx, ly, { size: 32, align, color: COL.snow });
+            }
+          });
+          // walking wizard
+          const pos = heroAt(t);
+          if (pos) {
+            const L = legs.find((l) => t >= l.t0 && t < l.t0 + WALK_D);
+            sprite("hero-map", L?.len ? 1 + (Math.floor(real(t) * 8) % 4) : 0, pos[0] - 9, pos[1] - 20);
+          }
+          // quest log: a row per place, its dates ticked off as the hero arrives; dates
+          // separated by " · ", wrapping to a further line where the row is full
+          const qx = LOG_X;
+          const qy = 230;
+          const dw = 720 - 92 - 30;
+          const rows = GROUPS.map((g) => {
+            const lines = [[]];
+            let w = 0;
+            g.quests.forEach((k) => {
+              const d = measure(`${QUESTS[k].date} · `, 24);
+              if (w && w + d - measure(" · ", 24) > dw) {
+                lines.push([]);
+                w = 0;
+              }
+              lines[lines.length - 1].push(k);
+              w += d;
+            });
+            return lines;
+          });
+          const rowsH = rows.reduce((a, l) => a + 64 + l.length * 40, 0);
+          if (preview) return;
+          ctx.save();
+          const qa = clamp(m * 4);
+          if (qa < 1) ctx.filter = `opacity(${qa})`;
+          plate(qx, qy, 720, 136 + rowsH, COL.night, COL.teal, 6, 0.9);
+          txt(WORDS.log, qx + 36, qy + 72, { size: 32, color: COL.amber });
+          let y = qy + 150;
+          GROUPS.forEach((g, r) => {
+            const all = g.quests.every((k) => QUESTS[k].past);
+            // the check box fades with the panel's texts
+            ctx.globalAlpha = UI_A;
+            ctx.fillStyle = all ? COL.green : COL.stone3;
+            ctx.fillRect(qx + 36, y - 28, 32, 32);
+            if (all) {
+              ctx.fillStyle = COL.night;
+              ctx.fillRect(qx + 42, y - 14, 6, 6);
+              ctx.fillRect(qx + 48, y - 8, 6, 6);
+              ctx.fillRect(qx + 54, y - 14, 6, 6);
+              ctx.fillRect(qx + 60, y - 22, 6, 8);
+            }
+            ctx.globalAlpha = 1;
+            txt(g.name, qx + 92, y, {
+              size: 24,
+              color: all ? COL.snow : COL.nightInk,
+              shadow: false,
+            });
+            rows[r].forEach((line, li) => {
+              let dx = qx + 92;
+              line.forEach((k, j) => {
+                const d = (j ? " · " : "") + QUESTS[k].date;
+                dx += txt(d, dx, y + 40 + li * 40, {
+                  size: 24,
+                  color: QUESTS[k].past ? COL.amber : COL.muted,
+                  shadow: false,
+                });
+              });
+            });
+            y += 64 + rows[r].length * 40;
+          });
+          ctx.restore();
+        }
+
+        // trainers' left edges for one and for two trainers, right of where the hero waits, so
+        // the bubble above them never covers him; with a visitor in the room the hero stops
+        // short of it
+        const TRAINER_X = [[215], [195, 255]];
+        const VISITOR_X = 124;
+        // screen pixels kept clear right of the visitor's head: its bubble ends in the first half,
+        // the trainer's bubble starts after it
+        const VISITOR_GAP = 96;
+        const heroWait = (r) => (EGG.visitor?.r === r ? 64 : 104);
+        // A room's ground tags (the trainers', a visitor's): each on one of three rows under its
+        // own figure, a leader line from the figure's feet down into its plate. A plate may slide
+        // sideways as long as its line meets it LEAD in from either end. The layout is the lowest,
+        // least shifted one where no two plates of a row come within LEAD of each other and no
+        // line passes within LEAD of a plate it does not belong to; a room with none stops the
+        // render (bad), as a text too long for its plate does.
+        const LEAD = 24;
+        const roomLabels = (items) => {
+          const base = items.map((it) => ({ ...it, w: measure(it.text, 16) + 40 }));
+          // plate left edges, the centred one first, then outward in steps of 12
+          const spots = (it) => {
+            const [lo, hi] = [
+              Math.max(SAFE, it.fx - it.w + LEAD),
+              Math.min(1920 - SAFE - it.w, it.fx - LEAD),
+            ];
+            if (lo > hi) return [clamp(it.fx - it.w / 2, SAFE, 1920 - SAFE - it.w)];
+            const c = clamp(it.fx - it.w / 2, lo, hi);
+            const out = [c];
+            for (let d = 12; c - d >= lo || c + d <= hi; d += 12) {
+              if (c - d >= lo) out.push(c - d);
+              if (c + d <= hi) out.push(c + d);
+            }
+            return out;
+          };
+          const clash = (a, b) =>
+            (a.row === b.row && a.l < b.r + LEAD && a.r > b.l - LEAD) ||
+            (a.row > b.row && a.fx > b.l - LEAD && a.fx < b.r + LEAD) ||
+            (b.row > a.row && b.fx > a.l - LEAD && b.fx < a.r + LEAD);
+          const orders = (xs) =>
+            xs.length < 2
+              ? [xs]
+              : xs.flatMap((x, k) => orders(xs.filter((_, j) => j !== k)).map((o) => [x, ...o]));
+          let best = null;
+          for (let code = 0; code < 3 ** base.length; code++) {
+            const rows = base.map((_, k) => Math.floor(code / 3 ** k) % 3);
+            for (const order of orders(base.map((_, k) => k))) {
+              const placed = [];
+              let moved = 0;
+              for (const k of order) {
+                const it = base[k];
+                const sp = spots(it);
+                const l = sp.find((l) =>
+                  placed.every((q) => !clash({ ...it, row: rows[k], l, r: l + it.w }, q)),
+                );
+                if (l === undefined) break;
+                moved += Math.abs(l - sp[0]);
+                placed[k] = { ...it, row: rows[k], l, r: l + it.w, cx: l + it.w / 2 };
+              }
+              if (Object.keys(placed).length < base.length) continue;
+              const cost = Math.max(...rows) * 1e6 + rows.reduce((a, v) => a + v, 0) * 1e4 + moved;
+              if (!best || cost < best.cost) best = { placed, cost };
+            }
+          }
+          if (best) return best.placed;
+          return base.map((it, k) => ({
+            ...it,
+            row: k,
+            cx: it.fx,
+            l: it.fx - it.w / 2,
+            r: it.fx + it.w / 2,
+            bad: true,
+          }));
+        };
+        // a room in two places ("A+B" landmarks, "A & B" place) plays them as two beats: the
+        // second backdrop and name take over halfway through the room, on a beat
+        const roomD = (r) =>
+          r === N - 1 ? ROOMS_END - ROOMS_START - (ROOM_T0[r] ?? 0) : ROOM_T0[r + 1] - ROOM_T0[r];
+        // the second place takes over on a beat, the first keeping a single room's half
+        const secondAt = (r) => Math.round((roomD(r) - (twoBeats(stops[r]) ? EXTRA : 0)) / 2 / BEAT) * BEAT;
+        // a room's ground tags laid out (roomLabels): the visitor's from 0.3 s, the second
+        // trainer's after the first's, so two long names never land at once; in two beats each
+        // trainer's tag is laid out with the visitor's in its own beat, and the visitor's tag
+        // takes the placement of the beat in view
+        const TAGS = [];
+        const tagsOf = (r, ox, ru, shown = () => 1) => {
+          // laid out once per room where it stands still (ox 0), then moved with the room
+          TAGS[r] ??= layoutTags(r);
+          const beat = shown(1) > 0 ? 1 : 0;
+          return TAGS[r].map((L) => ({
+            ...L,
+            fx: L.fx + ox * PX,
+            cx: L.cx + ox * PX,
+            on: ru >= L.from,
+            a: L.inBeat !== undefined ? Number(L.inBeat === beat) : L.k === undefined ? 1 : shown(L.k),
+          }));
+        };
+        const layoutTags = (r) => {
+          const s = stops[r];
+          const beats = twoBeats(s);
+          const xs = TRAINER_X[sideBySide(s) ? 1 : 0];
+          const items = s.npcs.map((name, k) => ({
+            text: `Trainer: ${name}`,
+            fx: (xs[beats ? 0 : k] + NPC_HEAD) * PX,
+            from: BEAT + (beats ? 0 : k * 2 * BEAT),
+            k,
+          }));
+          const vis =
+            EGG.visitor?.r === r && EGG.visitor.tag
+              ? [{ text: EGG.visitor.tag, fx: (VISITOR_X + 18) * PX, from: 0.3 + 1e-6 }]
+              : [];
+          return beats
+            ? items.flatMap((it) => roomLabels([...vis.map((v) => ({ ...v, inBeat: it.k })), it]))
+            : roomLabels([...vis, ...items]);
+        };
+        function sceneRooms(t) {
+          const T = t - ROOMS_START;
+          const i = Math.max(
+            0,
+            ROOM_T0.findLastIndex((t0) => T >= t0),
+          );
+          const u = T - ROOM_T0[i];
+          const last = i === N - 1;
+          const exit0 = roomD(i) - 2 * BEAT;
+          const camX = i * W + (last ? 0 : ease((u - exit0) / 0.8) * W);
+          const near = (r) => r * W - camX;
+          const rooms = [i - 1, i, i + 1].filter((r) => r >= 0 && r < N && Math.abs(near(r)) < W);
+          rooms.forEach((r) => {
+            const [k, k2] = stops[r].landmark.split("+");
+            backdrop(k, near(r));
+            for (const e of PROPS) if (e.r === r) eggProp(e, near(r) + e.x, t);
+            const f = k2 ? clamp((T - ROOM_T0[r] - secondAt(r)) / 0.3) : 0;
+            if (f > 0) faded(f, () => backdrop(k2, near(r)));
+          });
+          snowfall(t, 90, 2);
+          rooms.forEach((r) => {
+            const ox = near(r);
+            const ru = T - ROOM_T0[r];
+            // the room's people and their tags fade out before the pan to the next room, so
+            // nobody shows in two rooms and the hero's hop crosses no one
+            const fa = r === N - 1 ? 1 : clamp((exit0 - 0.1 - ru) / 0.3);
+            // the crosser in the room's own place: in a room of two places the second one's
+            if (EGG.crosser?.r === r) {
+              const t0 = twoBeats(stops[r]) ? secondAt(r) + BEAT : (2 * BEAT) / PACE + 0.2;
+              faded(fa, () => EGGS.crosser(ox, ru, t0, roomD(r) - 2 * BEAT - 0.3));
+            }
+            if (EGG.visitor?.r === r) faded(fa, () => EGGS.visitor(ox, ru));
+            const s = stops[r];
+            // a room in two places shows each trainer in its own beat, where the first stands
+            const beats = twoBeats(s);
+            const xs = TRAINER_X[sideBySide(s) ? 1 : 0];
+            // the first trainer and tag fade out before the swap, the second fade in after it
+            const sw = ru - secondAt(r);
+            const shown = (k) => (beats ? (k ? clamp(sw / 0.3) : clamp(-sw / 0.3)) : 1);
+            const labels = tagsOf(r, ox, ru, shown);
+            s.npcs.forEach((name, k) => {
+              if (shown(k) > 0) faded(fa * shown(k), () => npc(ox + xs[beats ? 0 : k], name));
+            });
+            labels.forEach((L) =>
+              faded(fa * L.a, () => {
+                if (!L.on || L.fx < -60 || L.fx > 1980) return;
+                // the plate on the 6 px grid and the glyphs on their 4 px one, which meet with the
+                // capitals 2 px under the plate's 4 px border at 858, 918 and 978, the third row
+                // ending at 1026, the bottom of the title-safe area
+                const ty = FLOOR * PX + 18 + L.row * 60;
+                ctx.fillStyle = COL.teal;
+                ctx.globalAlpha = UI_A;
+                ctx.fillRect(L.fx - 3, FLOOR * PX, 6, ty - FLOOR * PX);
+                ctx.globalAlpha = 1;
+                plate(L.cx - L.w / 2, ty, L.w, 48, COL.night, COL.teal, 4, 0.94);
+                txt(L.text, L.cx, ty + 38, {
+                  size: 16,
+                  align: "center",
+                  color: COL.snow,
+                  shadow: false,
+                });
+              }),
+            );
+          });
+          // hero: walk in, wait, walk on into the next room, jumping over the trainers
+          const s = stops[i];
+          let wx;
+          let wy = FLOOR;
+          let moving = true;
+          let air = false;
+          const stand = i * W + heroWait(i);
+          // walks keep their pace: the walk in and the hop take their old frame-clock time
+          const inD = (2 * BEAT) / PACE;
+          const hopD = 0.8 / PACE;
+          if (u < inD) {
+            wx = lerp(i * W + (i === 0 ? -60 : 10), stand, u / inD);
+          } else if (u < exit0) {
+            wx = stand;
+            moving = false;
+          } else if (u >= exit0 + hopD) {
+            // over at the next room's door, waiting for the camera
+            wx = (i + 1) * W + 10;
+            moving = false;
+          } else {
+            const p = (u - exit0) / hopD;
+            wx = lerp(stand, (i + 1) * W + 10, p);
+            const q = (p - 0.12) / 0.55;
+            if (q > 0 && q < 1) {
+              air = true;
+              wy = FLOOR - 44 * Math.sin(Math.PI * q);
+            }
+          }
+          wizard(wx - camX, wy, t, moving, false, air);
+          rooms.forEach((r) => {
+            if (EGG.walker?.r === r) EGGS.walker(near(r), T - ROOM_T0[r]);
+          });
+          // the speech bubble of the trainer in view, its tail down to the speaker's head: trainer
+          // 1's line, gone before the swap in a room of two places, whose second beat is trainer 2's
+          const second = twoBeats(s) && u >= secondAt(i);
+          const said = second ? s.line2 : s.line;
+          const lineAt = second ? secondAt(i) + BEAT : BEAT;
+          const lineEnd = twoBeats(s) && !second ? secondAt(i) - 0.3 : exit0 - 0.3;
+          if (said && s.npcs.length && u >= lineAt && u < lineEnd) {
+            // with a visitor in the room the bubble starts a gap right of its head
+            const minX = EGG.visitor?.r === i ? (VISITOR_X + 18 - (camX - i * W)) * PX + VISITOR_GAP : 60;
+            const lines = wrap(said, Math.min(900, 1860 - minX - 72), 32);
+            const [bw, bh] = bubbleSize(lines);
+            const headX = (TRAINER_X[sideBySide(s) ? 1 : 0][0] + NPC_HEAD - (camX - i * W)) * PX;
+            const by = (FLOOR - NPC_H - 4) * PX - bh;
+            bubble(
+              lines,
+              clamp(headX - bw / 2, minX, 1860 - bw),
+              by,
+              headX,
+              headX,
+              (FLOOR - NPC_H) * PX,
+              typed(u, lineAt, 75),
+            );
+          }
+          // room header
+          ctx.globalAlpha = 0.82 * UI_A;
+          ctx.fillStyle = COL.night;
+          ctx.fillRect(0, 0, 1920, 196);
+          ctx.globalAlpha = UI_A;
+          ctx.fillStyle = COL.teal;
+          ctx.fillRect(0, 196, 1920, 6);
+          ctx.globalAlpha = 1;
+          // the header names the room in view: it switches at the middle of the pan, its text
+          // gone around that moment, and appears only once the dissolve into the rooms is over
+          const hi = Math.min(N - 1, Math.round(camX / W));
+          const hs = stops[hi];
+          const ha = clamp((Math.abs(((camX / W) % 1) - 0.5) - 0.15) * 8) * clamp((T - 0.4) * 5);
+          txt(`Level ${hi + 1}/${N}`, 64, 76, {
+            size: 24,
+            color: COL.amber,
+            alpha: ha,
+          });
+          // every date of the room at once: the room states all it held; in a room of two
+          // places the name is the beat's, and so is the date that stays lit
+          const parts = hs.landmark.includes("+") ? hs.place.split(" & ") : [];
+          const du = T - ROOM_T0[hi] - secondAt(hi);
+          const beat = parts.length > 1 ? (du >= 0 ? 1 : 0) : -1;
+          const swap = beat < 0 ? 1 : clamp(Math.abs(du) / 0.15);
+          txt(parts[beat] ?? hs.place, 64, 148, {
+            size: 40,
+            color: COL.snow,
+            alpha: ha * swap,
+          });
+          hs.quest.forEach((l, k) =>
+            txt(l, 1856, 148 - (hs.quest.length - 1 - k) * 40, {
+              size: 24,
+              align: "right",
+              color: COL.nightInk,
+              alpha: ha * (beat < 0 || beat === k ? 1 : 0.4),
+            }),
+          );
+        }
+
+        // The fight: four quick exchanges (spell, throw, spell, final spell), then the boss
+        // turns friendly and says its line, and only once it is said does the bar name it a
+        // friend. A friendly boss is never fought: it looks menacing under the boss title until
+        // the wizard's first scan turns it, and each scan fills a friendship bar. b is seconds
+        // since the cut.
+        const BOSS = {
+          // [start, kind]: "cast" the wizard's beam lands at start+0.45, "throw" the boss throws
+          hits: [
+            [1.0, "cast"],
+            [1.7, "throw"],
+            [2.4, "cast"],
+            [3.1, "cast"],
+          ],
+          turn: 3.8,
+        };
+        // the line types at 60 characters a second from turn + 0.3 (scripts/score.mjs plays the
+        // friend jingle at this moment)
+        const REVEAL = BOSS.turn + 0.3 + [...V.bossLine].length / 60 / PACE + 0.15;
+        // the boss sprites (324x324 art pixels, 108x108 units), top-left in units, feet on the
+        // floor; per boss: its display face, where the spells land, its display's left edge (where
+        // the boss line's tail lands), the point it throws from, what it throws and leaves, what it
+        // hands out once friendly, and its friendly idle (BOSS_SET: the customer's own)
+        const ART = BOSS_SET ?? {
+          face: [54, 62],
+          display: [37, 62],
+          from: [50, 8],
+          thrown: "paper",
+          lands: "paper",
+        };
+        const BOSS_DIR = BOSS_SET ? CUST(BOSS_SET.dir) : `assets/boss/${V.bossArt}`;
+        const BOSS_IMG = { menacing: new Image(), friendly: new Image() };
+        BOSS_IMG.menacing.src = `${BOSS_DIR}/menacing.png`;
+        BOSS_IMG.friendly.src = `${BOSS_DIR}/friendly.png`;
+        const BOSS_AT = [190, FLOOR - 106];
+        // a pixel heart centred on (x, y) in units, one art pixel per cell
+        const HEART = [".##.##.", "#######", "#######", ".#####.", "..###..", "...#..."];
+        const heart = (x, y, a) =>
+          HEART.forEach((r, j) =>
+            [...r].forEach(
+              (c, i) =>
+                c === "#" && rect(x + ((i - 3) / K) * 2, y + ((j - 3) / K) * 2, 2 / K, 2 / K, "#F43F5E", a),
+            ),
+          );
+        const BOSS_FACE = [BOSS_AT[0] + ART.face[0], BOSS_AT[1] + ART.face[1]];
+        function sceneBoss(t) {
+          const b = t - CUTS[2];
+          // the cues are story time; what each one sets moving runs on the frame clock
+          const rb = real(b);
+          const e = (s) => real(b - s);
+          backdrop("boss", 0);
+          const dy = rb < 0.5 ? lerp(-130, 0, ease(rb / 0.5)) : 0;
+          // a friendly boss is never fought: it takes no throw and no shake, only the spells
+          const kind = ART.friendly ? BOSS.hits.filter(([, k]) => k === "cast") : BOSS.hits;
+          const casts = BOSS.hits.filter(([s, k]) => k === "cast");
+          const hitAt = casts.map(([s]) => s + 0.45 / PACE);
+          const hits = hitAt.filter((h) => b >= h).length;
+          const sinceHit = Math.min(...hitAt.map((h) => (b >= h ? e(h) : 9)));
+          const shaking = !ART.friendly && ((rb > 0.5 && rb < 0.95) || sinceHit < 0.3);
+          const shake = shaking ? Math.round((hash(Math.floor(rb * 30)) - 0.5) * 6) : 0;
+          // a boss never fought looks menacing until the wizard's first scan lands, then turns
+          const turnAt = ART.friendly ? hitAt[0] : BOSS.turn;
+          const friendly = b > turnAt;
+          const X = shake;
+          const Y = dy;
+          // the boss: a painted sprite, menacing until the turn, then friendly; it flashes on a
+          // hit and hops while it throws
+          const flash = (!ART.friendly && sinceHit < 0.12) || (b > turnAt - 0.15 / PACE && b < turnAt);
+          const flinging = kind.some(([s, k]) => k === "throw" && e(s) > 0 && e(s) < 0.3);
+          const hop = flinging ? -(Math.floor(rb * 8) % 2) * 2 : 0;
+          const M = BOSS_IMG[friendly ? "friendly" : "menacing"];
+          ctx.save();
+          if (flash) ctx.filter = "brightness(2.4)";
+          ctx.drawImage(M, snapA(X + BOSS_AT[0]), snapA(Y + BOSS_AT[1] + hop), M.width * AP, M.height * AP);
+          ctx.restore();
+          // friendly, it idles on the frame clock: the top rows lift one art pixel on every other
+          // beat of the score (0.6 s), the face blinks, a puff of steam leaves the top
+          if (friendly) {
+            const ft = e(turnAt);
+            const [bx, by] = [X + BOSS_AT[0], Y + BOSS_AT[1]];
+            if (ART.knead && Math.floor(ft / 0.3) % 2)
+              ctx.drawImage(
+                M,
+                0,
+                0,
+                M.width,
+                ART.knead * K,
+                snapA(bx),
+                snapA(by) - AP,
+                M.width * AP,
+                ART.knead * K * AP,
+              );
+            if (ART.blink && ft % 2.4 > 2.2)
+              ART.blink.forEach(([x, y, w, h, c]) => rect(bx + x / K, by + y / K, w / K, h / K, c));
+            if (ART.steam)
+              for (let k = 0; k < 3; k++) {
+                // a puff every 1.2 s from the lid, three lobes of light and shade that grow,
+                // rise and thin out over 0.9 s
+                const p = (ft - 0.3 - k * 0.12) % 1.2;
+                if (p < 0 || p > 0.9) continue;
+                const q = p / 0.9;
+                const [sx, sy] = ART.steam;
+                const cx = bx + sx + (k - 1) * (2 + 3 * q);
+                const cy = by + sy - 3 - q * 16 - k;
+                const r = Math.round(1.5 + q * 3);
+                const al = 0.85 * (1 - q * q);
+                disc(cx, cy + 1, r, "#9AA8B8", al);
+                disc(cx, cy, r, COL.snow, al);
+              }
+          }
+          // the wizard: steps up to cast, hops over what is thrown
+          let wx = 52;
+          let wy = FLOOR;
+          let air = false;
+          let casting = false;
+          kind.forEach(([s, k]) => {
+            const p = e(s) / 0.6;
+            if (p < 0 || p > 1) return;
+            if (k === "cast") {
+              wx = 52 + 8 * Math.sin(Math.PI * p);
+              casting = true;
+            } else {
+              const q = (p - 0.35) / 0.5;
+              if (q > 0 && q < 1) {
+                air = true;
+                wy = FLOOR - 26 * Math.sin(Math.PI * q);
+              }
+            }
+          });
+          // a cheer once the boss is a friend
+          if (b > BOSS.turn + 0.4 && !air) sprite("hero", 7, wx, wy - HERO_H);
+          else wizard(wx, wy, t, false, false, air, casting);
+          // the table-top call that opens every fight, held 2 s once typed out
+          // the table-top call in the film's language
+          const call = EN ? "Roll for initiative!" : "Würfelt Initiative!";
+          const callDone = 0.5 + call.length / 40 / PACE;
+          if (b > 0.45 && b < callDone + 2 / PACE) {
+            const s = call;
+            const bw = measure(s, 32) + 48;
+            const bx = 50 * PX;
+            const bh = 78;
+            const by = (FLOOR - HERO_H) * PX - 60 - bh;
+            plate(bx, by, bw, bh, COL.snow, COL.night, PX);
+            ctx.globalAlpha = UI_A;
+            ctx.fillStyle = COL.night;
+            ctx.fillRect(bx + 72, by + bh - 6, 24, 24);
+            ctx.fillStyle = COL.snow;
+            ctx.fillRect(bx + 78, by + bh - 6, 12, 18);
+            ctx.globalAlpha = 1;
+            txt(s, bx + 24, by + 54, {
+              size: 32,
+              color: COL.ink,
+              shadow: false,
+              reveal: typed(b, 0.5, 40),
+            });
+          }
+          // spells: a beam of sparks from the staff to the boss, the last one twice as thick; at a
+          // friendly boss a scan instead: a teal line from the staff sweeps its body top to bottom
+          casts.forEach(([s], ci) => {
+            const p = e(s) / 0.45;
+            // the heart rises over 0.8 s once the scan is done
+            const hp = (e(s) - 0.45) / 0.8;
+            if (ART.friendly && hp >= 0 && hp <= 1)
+              heart(BOSS_FACE[0], BOSS_FACE[1] - 44 - hp * 16, clamp((1 - hp) * 3));
+            if (p < 0 || p > 1.3) return;
+            if (ART.friendly) {
+              // corner marks frame the boss, a line sweeps it top to bottom, the staff's crystal
+              // glows, and a heart rises once the scan is done
+              const al = p > 1 ? (1.3 - p) / 0.3 : 1;
+              const [x0, x1, y0, y1] = [BOSS_AT[0] + 8, BOSS_AT[0] + 100, BOSS_AT[1] + 10, FLOOR - 2];
+              for (const [cx, cy, dx, dy] of [
+                [x0, y0, 1, 1],
+                [x1, y0, -1, 1],
+                [x0, y1, 1, -1],
+                [x1, y1, -1, -1],
+              ]) {
+                rect(Math.min(cx, cx + dx * 8), cy - (dy < 0 ? 1 : 0), 8, 1, "#7DF9E8", al);
+                rect(cx - (dx < 0 ? 1 : 0), Math.min(cy, cy + dy * 8), 1, 8, "#7DF9E8", al);
+              }
+              const sy = lerp(y0, y1, Math.min(p, 1));
+              rect(x0 + 2, sy, x1 - x0 - 4, 1, "#7DF9E8", al * 0.9);
+              rect(x0 + 2, sy - 2, x1 - x0 - 4, 2, COL.teal, al * 0.35);
+              prop("spark-teal", wx + HERO_TIP[0], FLOOR - HERO_H + HERO_TIP[1], al);
+              return;
+            }
+            // painted sparks from the crystal to the face, the last spell twice as dense
+            const n = ci === casts.length - 1 ? 16 : 8;
+            const [tx, ty] = [wx + HERO_TIP[0], FLOOR - HERO_H + HERO_TIP[1]];
+            for (let k = 0; k < n; k++) {
+              const q = Math.min(p, 1) - (k / n) * 0.5;
+              if (q < 0) continue;
+              const x = lerp(tx, BOSS_FACE[0] + X, q);
+              const y = lerp(ty, BOSS_FACE[1] + Y, q) + Math.sin(q * 14 + k) * (3 + (k % 3));
+              prop(k % 2 ? "spark-teal" : "spark-purple", x, y, p > 1 ? (1.3 - p) / 0.3 : 1);
+            }
+            if (p >= 1) prop("burst", BOSS_FACE[0] + X, BOSS_FACE[1] + Y, 1 - (p - 1) / 0.3);
+          });
+          // what it throws, flung in an arc at the wizard, landing where he stood
+          kind
+            .filter(([, k]) => k === "throw")
+            .forEach(([s]) => {
+              for (let k = 0; k < 3; k++) {
+                const p = (e(s) - k * 0.08) / 0.55;
+                if (p < 0) continue;
+                if (p <= 1) {
+                  const x = lerp(X + BOSS_AT[0] + ART.from[0], 66 + k * 12, p);
+                  const y = lerp(Y + BOSS_AT[1] + ART.from[1], FLOOR - 5, p) - 30 * Math.sin(Math.PI * p);
+                  prop(ART.thrown, x, y);
+                } else if (p < 1.8) prop(ART.lands, 66 + k * 12, FLOOR - 3, (1.8 - p) / 0.8);
+              }
+            });
+          // its gifts once friendly
+          for (let k = 0; k < 8; k++) {
+            const lt = BOSS.turn + 0.5 + k * 0.2;
+            if (b < lt) continue;
+            const p = clamp(e(lt) / 0.9);
+            const ex = 114 + k * 12 + (k > 3 ? 100 : 0);
+            const x = lerp(X + BOSS_AT[0] + 54, ex, p);
+            const y = lerp(Y + BOSS_AT[1] + 4, FLOOR - 6, p) - 40 * Math.sin(Math.PI * p);
+            const gifts = ART.gifts ?? ["star"];
+            prop(gifts[(k + 1) % gifts.length], x, y);
+          }
+          // boss bar: drops a third per spell, then refills green; a friendly boss's bar is a
+          // friendship bar filling a third per scan; on a dark plate over the busy backdrop
+          if (b > 0.6) {
+            const label =
+              b > REVEAL
+                ? `${WORDS.friend}: ${V.bossName}`
+                : ART.friendly && friendly
+                  ? WORDS.friendship
+                  : `${WORDS.boss}: ${V.bossName}`;
+            const pw = Math.max(920, measure(label, 32) + 120);
+            plate(960 - pw / 2 + shake * PX, 36, pw, 144, COL.night, COL.teal, 6, 0.86);
+            txt(label, 960 + shake * PX, 100, {
+              size: 32,
+              align: "center",
+              color: friendly ? COL.green : COL.amber,
+            });
+            plate(560 + shake * PX, 120, 800, 44, COL.night, COL.snow, 6);
+            const left = 1 - hits / Math.max(1, casts.length);
+            const fill = ART.friendly
+              ? friendly
+                ? lerp(hits - 1, hits, clamp(sinceHit / 0.25)) / Math.max(1, casts.length)
+                : 1
+              : friendly
+                ? clamp(e(BOSS.turn) / 0.6)
+                : lerp(left + 1 / casts.length, left, clamp(sinceHit / 0.25));
+            ctx.fillStyle = friendly ? COL.green : COL.amber;
+            ctx.globalAlpha = UI_A;
+            ctx.fillRect(572 + shake * PX, 132, 776 * clamp(fill), 20);
+            ctx.globalAlpha = 1;
+          }
+          // a reading for its display, on a plate above it, once it is a friend
+          if (ART.readout && b > REVEAL) {
+            const r = ART.readout;
+            const w = measure(r.text, 16) + 40;
+            const fx = (BOSS_AT[0] + ART.face[0] + X) * PX;
+            const bx = clamp(fx - w / 2, SAFE, 1920 - SAFE - w);
+            const by = 198;
+            plate(bx, by, w, 48, COL.night, r.color ?? COL.green, 4, 0.94);
+            txt(r.text, bx + w / 2, by + 36, {
+              size: 16,
+              align: "center",
+              color: r.color ?? COL.green,
+              shadow: false,
+            });
+          }
+          // boss line: the bubble's lower right corner just above and left of the machine's
+          // display, so a short tail reaches its left edge and the line reads as the boss's
+          if (b > BOSS.turn + 0.2 && V.bossLine) {
+            const lines = wrap(V.bossLine, 720, 32);
+            const [bw, bh] = bubbleSize(lines);
+            const [dx, dy] = [(BOSS_AT[0] + ART.display[0]) * PX, (BOSS_AT[1] + ART.display[1]) * PX];
+            const bx = dx - 36 - bw;
+            const by = Math.max(270, dy - 60 - bh);
+            bubble(lines, bx, by, bx + bw - 54, dx + 6, dy, typed(b, BOSS.turn + 0.3, 60));
+          }
+        }
+
+        // ---------- workshop hub: the composed picture plus overlays ----------
+        // hubLayout (customer file, written by scripts/workshop.mjs compose from greeting/slots.json)
+        // holds the overlays in image pixels, a few named points and the painted (quiet) boxes.
+        const HUB = JSON.parse(V.hubLayout || "{}");
+        // hubImage is the composed picture in its image pixels, the frame of every slot, point
+        // and quad; the film shows its sibling "-960.png", the same picture snapped to the art
+        // grid and quantised (scripts/workshop.mjs compose and snap)
+        const hubImg = new Image();
+        hubImg.src = V.hubImage ? CUST(V.hubImage) : "assets/workshop-film.png";
+        const hub960 = new Image();
+        hub960.src = hubImg.src.replace(/\.png$/, "-960.png");
+        // The game kit's title screen is this same file: the film ends on it.
+        const baseImg = new Image();
+        baseImg.src = "assets/workshop-hw-960.png";
+        const giftImg = new Image();
+        giftImg.src = "assets/belt-gifts.png";
+        const QR = (() => {
+          const q = qrcode(0, "M");
+          q.addData(V.kitUrl);
+          q.make();
+          return q;
+        })();
+        const custLogo = new Image();
+        custLogo.src = V.customerLogo ? CUST(V.customerLogo) : "assets/type-logo-long.svg";
+        // Magenta variant of the image: overlays are clipped to its magenta pixels.
+        const hubMask = new Image();
+        hubMask.src = V.hubMask
+          ? CUST(V.hubMask)
+          : V.hubImage
+            ? hubImg.src
+            : "assets/workshop-film-magenta.png";
+        const maskCv = document.createElement("canvas");
+        const buildMask = () => {
+          maskCv.width = hubMask.width;
+          maskCv.height = hubMask.height;
+          const g = maskCv.getContext("2d");
+          g.drawImage(hubMask, 0, 0);
+          const im = g.getImageData(0, 0, maskCv.width, maskCv.height);
+          const d = im.data;
+          const w = maskCv.width;
+          const h = maskCv.height;
+          let m = new Uint8Array(w * h);
+          for (let i = 0; i < m.length; i++)
+            m[i] = d[i * 4] > 190 && d[i * 4 + 1] < 90 && d[i * 4 + 2] > 190 ? 1 : 0;
+          // closing (grow 2, shrink 2) fills holes the painting left inside a blank
+          const pass = (src, grow, dx, dy) => {
+            const out = new Uint8Array(w * h);
+            for (let y = 0; y < h; y++)
+              for (let x = 0; x < w; x++) {
+                let v = grow ? 0 : 1;
+                for (let k = -2; k <= 2; k++) {
+                  const xx = clamp(x + k * dx, 0, w - 1);
+                  const yy = clamp(y + k * dy, 0, h - 1);
+                  const b = src[yy * w + xx];
+                  v = grow ? v | b : v & b;
+                }
+                out[y * w + x] = v;
+              }
+            return out;
+          };
+          m = pass(pass(pass(pass(m, 1, 1, 0), 1, 0, 1), 0, 1, 0), 0, 0, 1);
+          for (let i = 0; i < m.length; i++) d[i * 4 + 3] = m[i] ? 255 : 0;
+          g.putImageData(im, 0, 0);
+        };
+        const MASKED = new Set(["logo", "label", "board", "doorsign"]);
+        // {places}, {quests} and {stops} count the customer's data, so a plan line never claims
+        // more or fewer steps than the film shows
+        const SCRIPT = V.screenScript
+          .replaceAll("{places}", PLACES.length)
+          .replaceAll("{quests}", QUESTS.length)
+          .replaceAll("{stops}", stops.length)
+          .split("|")
+          .filter(Boolean);
+        const TEAMS = V.teams.split("|").filter(Boolean);
+        const slots = (kind) => (HUB.slots ?? []).filter((s) => s.kind === kind);
+        const point = (name) => HUB.points?.[name] ?? [hubImg.width / 2, hubImg.height / 2];
+        let LIGHTS = [];
+        // the string lights lit at t: a few at a time, each cycling its own warm colour
+        const lit = (t) => {
+          const n = Math.floor(t * 2.5);
+          const cyc = ["#FFF1B8", COL.amber, "#FDBA74"];
+          return LIGHTS.flatMap(([x, y], i) =>
+            hash(i * 7 + n) > 0.55 ? [[x, y, cyc[(i + n) % cyc.length]]] : [],
+          );
+        };
+        // String-light bulbs: bright warm pixels in the upper third, one per 8-pixel cell.
+        const findLights = () => {
+          const c = document.createElement("canvas");
+          c.width = hubImg.width;
+          c.height = hubImg.height;
+          const g = c.getContext("2d");
+          g.drawImage(hubImg, 0, 0);
+          const yMax = Math.floor(hubImg.height * 0.33);
+          const d = g.getImageData(0, 0, c.width, yMax).data;
+          const cells = new Map();
+          for (let y = 0; y < yMax; y++) {
+            for (let x = 0; x < c.width; x++) {
+              const i = (y * c.width + x) * 4;
+              if (d[i] > 240 && d[i + 1] > 190 && d[i + 2] < 140) {
+                const k = `${x >> 3},${y >> 3}`;
+                cells.set(k, (cells.get(k) ?? 0) + 1);
+              }
+            }
+          }
+          // none inside a blank (an overlay covers it), round the sign, or on a painted slot fill
+          const boxes = [
+            ...(HUB.slots ?? []).map((s) => {
+              const m = s.kind === "logo" ? 28 : 4;
+              return [s.x - m, s.y - m, s.w + 2 * m, s.h + 2 * m];
+            }),
+            ...(HUB.quiet ?? []),
+          ];
+          const inSlot = ([x, y]) =>
+            boxes.some(([bx, by, bw, bh]) => x >= bx && x < bx + bw && y >= by && y < by + bh);
+          LIGHTS = [...cells]
+            .filter(([, n]) => n >= 8)
+            .map(([k]) => k.split(",").map((v) => Number(v) * 8 + 4))
+            .filter((p) => !inSlot(p))
+            .slice(0, 160);
+        };
+        // Zoom steps whole screen pixels per art pixel (2 at zoom 1, 3 at 1.5, 4 at 2), so a
+        // push-in never resamples the picture to an uneven grid; offsets are whole pixels. The
+        // scale comes from the art grid's width, not from fitting the 1672x940 layout picture:
+        // 940 is not 16:9, and fitting its height drew the 960 picture 1921 px wide, a pixel off
+        // the grid on one half.
+        const hubT = (cx, cy, z) => {
+          const iw = hubImg.width;
+          const ih = hubImg.height;
+          const s = (AP * Math.max(1, Math.round(z * 2) / 2) * W * K) / iw;
+          return {
+            s,
+            x0: Math.round(clamp(960 - cx * s, 1920 - iw * s, 0)),
+            y0: Math.round(clamp(540 - cy * s, 1080 - ih * s, 0)),
+          };
+        };
+        const scr = (T, r) => ({
+          x: T.x0 + r.x * T.s,
+          y: T.y0 + r.y * T.s,
+          w: r.w * T.s,
+          h: r.h * T.s,
+        });
+        // Camera through keys [time, cx, cy, zoom, stop]: a cubic through each key, so it never
+        // halts mid-move; a key marked stop holds still. Centres are clamped to the picture
+        // first, so the frame edge never brakes the move halfway.
+        const camAt = (keys, t) => {
+          const P = keys.map(([kt, x, y, z, stop]) => {
+            const T = hubT(x, y, z);
+            return [kt, (960 - T.x0) / T.s, (540 - T.y0) / T.s, z, stop];
+          });
+          let k = 0;
+          while (k < P.length - 2 && t > P[k + 1][0]) k++;
+          const a = P[k];
+          const b = P[k + 1] ?? a;
+          const dt = b[0] - a[0] || 1;
+          const f = clamp((t - a[0]) / dt);
+          const slope = (i, j) => {
+            const p = P[i];
+            if (p[4]) return 0;
+            const lo = P[Math.max(0, i - 1)];
+            const hi = P[Math.min(P.length - 1, i + 1)];
+            return (hi[j] - lo[j]) / (hi[0] - lo[0] || 1);
+          };
+          const h = (j) =>
+            (2 * f ** 3 - 3 * f ** 2 + 1) * a[j] +
+            (f ** 3 - 2 * f ** 2 + f) * dt * slope(k, j) +
+            (-2 * f ** 3 + 3 * f ** 2) * b[j] +
+            (f ** 3 - f ** 2) * dt * slope(Math.min(k + 1, P.length - 1), j);
+          return [h(1), h(2), h(3)];
+        };
+        // ---------- overlays on the picture's own grid ----------
+        // The picture is shown snapped to the art grid, 960 across (hub960). Overlays are laid
+        // out in cells of 480 across (CELL image pixels each), every cell D x D art pixels, and
+        // drawn into layers at art-pixel resolution, lit like the scene, quantised to the
+        // picture's own palette and blown up without smoothing; the ambient life (snow, lights,
+        // sparkle, steam) draws single art pixels.
+        let CELL = 1;
+        const D = 2;
+        // image pixels per art pixel
+        let CELLD = 1;
+        // the layout's cells across and down
+        let CW = 480;
+        let CH = 270;
+        let PAL = [];
+        const cellCv = document.createElement("canvas");
+        const cellTop = document.createElement("canvas");
+        const cellMask = document.createElement("canvas");
+        // lettering on a half-cell grid (the art grid, D = 2), over the cell layer: clipped to the
+        // blanks like the cell layer, and unclipped for what hangs in front (gift tags)
+        const fineCv = document.createElement("canvas");
+        const fineTop = document.createElement("canvas");
+        // cells of window glass, where snow may fall
+        let PANE = new Uint8Array(0);
+        // the pictures at one pixel per art pixel, so the hub, its gift layer and the plain h&w
+        // picture all land on the art grid with the overlays; the gift layer is area-sampled
+        // and quantised to the picture's palette here (the pictures come snapped)
+        const SNAP = {};
+        const snapped = (im) => {
+          const c = document.createElement("canvas");
+          c.width = Math.round(im.width / CELLD);
+          c.height = Math.round(im.height / CELLD);
+          const g = c.getContext("2d", { willReadFrequently: true });
+          g.imageSmoothingQuality = "high";
+          g.drawImage(im, 0, 0, c.width, c.height);
+          quantise(g);
+          return c;
+        };
+        // a snapped picture with its top-left at image point (x, y), moved to whole art pixels; the
+        // box is rounded to whole screen pixels against float error in CELLD * T.s
+        const drawSnapped = (c, T, x = 0, y = 0) =>
+          ctx.drawImage(
+            c,
+            T.x0 + Math.round(Math.round(x / CELLD) * CELLD * T.s),
+            T.y0 + Math.round(Math.round(y / CELLD) * CELLD * T.s),
+            Math.round(c.width * CELLD * T.s),
+            Math.round(c.height * CELLD * T.s),
+          );
+        // the gifts on the belt, composed per frame at one pixel per cell (drawHub)
+        const beltCv = document.createElement("canvas");
+        const ENTRY = 40;
+        const buildCells = () => {
+          CELL = hubImg.width / 480;
+          CELLD = CELL / D;
+          const w = 480;
+          const h = Math.round(hubImg.height / CELL);
+          CW = w;
+          CH = h;
+          SNAP.hub = hub960;
+          SNAP.base = baseImg;
+          for (const c of [cellCv, cellTop, cellMask]) {
+            c.width = w * D;
+            c.height = h * D;
+          }
+          const g = cellMask.getContext("2d", { willReadFrequently: true });
+          g.drawImage(maskCv, 0, 0, w * D, h * D);
+          const m = g.getImageData(0, 0, w * D, h * D);
+          for (let i = 3; i < m.data.length; i += 4) m.data[i] = m.data[i] > 127 ? 255 : 0;
+          g.putImageData(m, 0, 0);
+          // palette: the 64 most frequent colours at cell size, then the 48 that differ most
+          const p = document.createElement("canvas");
+          p.width = w;
+          p.height = h;
+          const pg = p.getContext("2d", { willReadFrequently: true });
+          pg.drawImage(hubImg, 0, 0, w, h);
+          const d = pg.getImageData(0, 0, w, h).data;
+          for (const c of [fineCv, fineTop]) {
+            c.width = w * 2;
+            c.height = h * 2;
+          }
+          PANE = new Uint8Array(w * h);
+          for (let i = 0; i < w * h; i++) {
+            const [r, gg, b] = [d[i * 4], d[i * 4 + 1], d[i * 4 + 2]];
+            PANE[i] = b > 90 && b > r + 40 && b > gg + 10 ? 1 : 0;
+          }
+          const buckets = new Map();
+          for (let i = 0; i < d.length; i += 4) {
+            const k = ((d[i] >> 4) << 8) | ((d[i + 1] >> 4) << 4) | (d[i + 2] >> 4);
+            const b = buckets.get(k) ?? [0, 0, 0, 0];
+            b[0] += d[i];
+            b[1] += d[i + 1];
+            b[2] += d[i + 2];
+            b[3]++;
+            buckets.set(k, b);
+          }
+          const mean = [...buckets.values()]
+            .filter((b) => b[3] >= 12)
+            .sort((a, b) => b[3] - a[3])
+            .map(([r, gg, b, n]) => [r, gg, b].map((v) => Math.round(v / n)));
+          PAL = mean.slice(0, 64);
+          const dist = (a, b) => colourDist(a[0], a[1], a[2], b);
+          for (let n = 0; n < 48; n++) {
+            let best = null;
+            let bd = 0;
+            for (const c of mean) {
+              const e = Math.min(...PAL.map((q) => dist(c, q)));
+              if (e > bd) {
+                bd = e;
+                best = c;
+              }
+            }
+            if (best) PAL.push(best);
+          }
+          // the h&w colours belong to the scene: no painted colour is near the brand teal, so
+          // without them the mark quantises to blue
+          for (const hex of [...HW, ...HW_DARK]) {
+            const n = parseInt(hex.slice(1), 16);
+            PAL.push([n >> 16, (n >> 8) & 255, n & 255]);
+          }
+          // a big plate's cream as light() leaves it stays itself, and nothing else snaps to it: a
+          // painted fill can crowd the picture's own cream out of the 64, and the logo board then
+          // takes a neighbour's colour
+          const cream = parseInt(CREAM.slice(1), 16);
+          const plate = [
+            (cream >> 16) * 1.02 + 16,
+            ((cream >> 8) & 255) * 1.02 + 6,
+            (cream & 255) * 1.02,
+          ].map(Math.round);
+          qCache.set((plate[0] << 16) | (plate[1] << 8) | plate[2], plate);
+          SNAP.gift = snapped(giftImg);
+          beltCv.width = SNAP.hub.width;
+          beltCv.height = SNAP.gift.height;
+        };
+        const qCache = new Map();
+        // "redmean" weighted RGB distance: keeps reds red and blues blue
+        const colourDist = (r, g, b, q) => {
+          const m = (r + q[0]) / 2;
+          return (
+            (2 + m / 256) * (r - q[0]) ** 2 + 4 * (g - q[1]) ** 2 + (2 + (255 - m) / 256) * (b - q[2]) ** 2
+          );
+        };
+        const nearestPal = (r, g, b) => {
+          const key = (r << 16) | (g << 8) | b;
+          let c = qCache.get(key);
+          if (c) return c;
+          let best = Infinity;
+          for (const q of PAL) {
+            const e = colourDist(r, g, b, q);
+            if (e < best) {
+              best = e;
+              c = q;
+            }
+          }
+          qCache.set(key, c);
+          return c;
+        };
+        const quantise = (g) => {
+          const im = g.getImageData(0, 0, g.canvas.width, g.canvas.height);
+          const d = im.data;
+          for (let i = 0; i < d.length; i += 4) {
+            if (d[i + 3] < 128) {
+              d[i + 3] = 0;
+              continue;
+            }
+            const c = nearestPal(d[i], d[i + 1], d[i + 2]);
+            d[i] = c[0];
+            d[i + 1] = c[1];
+            d[i + 2] = c[2];
+            d[i + 3] = 255;
+          }
+          g.putImageData(im, 0, 0);
+        };
+        // Lit like the scene: the fire and the candles light it from below, so it warms towards
+        // the bottom with a warm row along the lower edge; a soft rim one art pixel wide in the
+        // shade. c in cells; the layer holds D art pixels per cell.
+        const light = (c, fall = 0.18) => {
+          const [w, h] = [c.w * D, c.h * D];
+          const im = ctx.getImageData(c.x * D, c.y * D, w, h);
+          const d = im.data;
+          for (let j = 0; j < h; j++)
+            for (let i = 0; i < w; i++) {
+              const n = (j * w + i) * 4;
+              if (!d[n + 3]) continue;
+              const rim = i === 0 || j === 0 || i === w - 1 || j === h - 1;
+              const f = (rim ? 0.82 : 1) * (1.02 - fall + fall * (j / Math.max(1, h - 1)));
+              const warm = j === h - 2 && !rim ? 2 : 1;
+              d[n] = Math.min(255, d[n] * f + 16 * warm);
+              d[n + 1] = Math.min(255, d[n + 1] * f + 6 * warm);
+              d[n + 2] = d[n + 2] * f;
+            }
+          ctx.putImageData(im, c.x * D, c.y * D);
+        };
+        // Every overlay follows the perspective of the surface it sits on: a slot with "quad"
+        // (its surface's four corners in image pixels, clockwise from top-left) is drawn flat in
+        // its box, then moved onto the quad by a homography, nearest-neighbour on each layer's grid.
+        const homography = (from, to) => {
+          const A = [];
+          from.forEach(([x, y], i) => {
+            const [u, v] = to[i];
+            A.push([x, y, 1, 0, 0, 0, -u * x, -u * y, u]);
+            A.push([0, 0, 0, x, y, 1, -v * x, -v * y, v]);
+          });
+          for (let i = 0; i < 8; i++) {
+            let p = i;
+            for (let j = i + 1; j < 8; j++) if (Math.abs(A[j][i]) > Math.abs(A[p][i])) p = j;
+            [A[i], A[p]] = [A[p], A[i]];
+            for (let j = 0; j < 8; j++) {
+              const f = A[j][i] / A[i][i];
+              if (j !== i) for (let k = i; k < 9; k++) A[j][k] -= f * A[i][k];
+            }
+          }
+          const h = A.map((r, i) => r[8] / r[i]);
+          return (x, y) => {
+            const w = h[6] * x + h[7] * y + 1;
+            return [(h[0] * x + h[1] * y + h[2]) / w, (h[3] * x + h[4] * y + h[5]) / w];
+          };
+        };
+        // every layer at D art pixels per cell
+        const layers = (cells) => [
+          ...cells.map((g) => [g, D]),
+          ...[fineCv, fineTop].map((cv) => [cv.getContext("2d"), D]),
+        ];
+        const grab = (c, cells) =>
+          layers(cells).map(([g, k]) => g.getImageData(c.x * k, c.y * k, c.w * k, c.h * k));
+        // moves what was drawn in box c since grab onto the quad; returns the quad's cell bounds
+        const warp = (c, quad, before, cells) => {
+          const q = quad.map(([x, y]) => [x / CELL, y / CELL]);
+          const { x, y, w, h } = c;
+          const back = homography(q, [
+            [x, y],
+            [x + w, y],
+            [x + w, y + h],
+            [x, y + h],
+          ]);
+          const xs = q.map((p) => p[0]);
+          const ys = q.map((p) => p[1]);
+          const b = {
+            x: Math.floor(Math.min(...xs)),
+            y: Math.floor(Math.min(...ys)),
+          };
+          b.w = Math.ceil(Math.max(...xs)) - b.x;
+          b.h = Math.ceil(Math.max(...ys)) - b.y;
+          layers(cells).forEach(([g, k], n) => {
+            const f = g.getImageData(x * k, y * k, w * k, h * k).data;
+            const was = before[n].data;
+            g.putImageData(before[n], x * k, y * k);
+            const out = g.getImageData(b.x * k, b.y * k, b.w * k, b.h * k);
+            for (let j = 0; j < b.h * k; j++)
+              for (let i = 0; i < b.w * k; i++) {
+                const [u, v] = back(b.x + (i + 0.5) / k, b.y + (j + 0.5) / k);
+                const si = Math.floor((u - x) * k);
+                const sj = Math.floor((v - y) * k);
+                if (si < 0 || sj < 0 || si >= w * k || sj >= h * k) continue;
+                const p = (sj * w * k + si) * 4;
+                if (!f[p + 3] || [0, 1, 2, 3].every((e) => f[p + e] === was[p + e])) continue;
+                out.data.set(f.subarray(p, p + 4), (j * b.w * k + i) * 4);
+              }
+            g.putImageData(out, b.x * k, b.y * k);
+          });
+          return b;
+        };
+        const cellOf = (r) => ({
+          x: Math.round(r.x / CELL),
+          y: Math.round(r.y / CELL),
+          w: Math.max(1, Math.round(r.w / CELL)),
+          h: Math.max(1, Math.round(r.h / CELL)),
+        });
+        // a gift tag's lines: two at most, no word cut; null when the name does not fit whole
+        const tagFit = (s, w) => {
+          const maxW = (w - 4) * 2 - 1;
+          const l = smallWrap(s, maxW);
+          return l.length <= 2 && l.every((x) => smallW(x) <= maxW) ? l : null;
+        };
+        const box = (x, y, w, h, c) => {
+          ctx.fillStyle = c;
+          ctx.fillRect(x, y, w, h);
+        };
+        // one font pixel per cell; top is the glyphs' top row
+        const cellTxt = (s, x, top, color, o = {}) =>
+          txt(s, x, top + 9, {
+            size: 48,
+            k: 1,
+            color,
+            shadow: false,
+            align: o.align,
+            reveal: o.reveal,
+          });
+        // Overlays read as paper in the scene's light: cream, never white. Lettering colours are
+        // snapped to the picture's palette.
+        const CREAM = "#E9D9B5";
+        const palCss = (hex) => {
+          const n = parseInt(hex.slice(1), 16);
+          const q = nearestPal(n >> 16, (n >> 8) & 255, n & 255);
+          return `rgb(${q[0]},${q[1]},${q[2]})`;
+        };
+        // Lettering in the door plaque's manner (the standard for every plate and tag): amber, a
+        // highlight on its top row, a dark drop shadow one font pixel down.
+        const litText = (g, l, x, y, k = 1) => {
+          smallText(g, l, x, y + k, palCss("#2A1608"), k);
+          smallText(g, l, x, y, palCss(COL.amber), k);
+          g.save();
+          g.beginPath();
+          g.rect(x, y, 1e4, k);
+          g.clip();
+          smallText(g, l, x, y, palCss("#FDE68A"), k);
+          g.restore();
+        };
+        // the lines of s that fit box c at k pixels per font pixel (2 where they fit, else 1),
+        // m half-cells of margin; null when they do not fit at all
+        const labelFit = (c, s, m, lit) => {
+          for (const k of [2, 1]) {
+            const maxW = Math.floor((c.w * 2 - m) / k);
+            const lines = smallWrap(s, maxW);
+            const th = (lines.length * 6 - (lit ? 0 : 1)) * k;
+            if (Math.max(...lines.map(smallW)) <= maxW && th <= c.h * 2 - m) return { k, lines, th };
+          }
+          return null;
+        };
+        // Lettering centred in a cell box: the small font at cell size where it fits, else on the
+        // half-cell grid, else handwriting too small to read (ink lines). o.lit letters in the
+        // plaque's manner, with a wider margin.
+        const labelCells = (c, s, o = {}) => {
+          if (o.bg) box(c.x, c.y, c.w, c.h, o.bg);
+          // the plaque's dark inner panel in a wooden rim
+          if (o.lit) {
+            box(c.x, c.y, c.w, c.h, "#4A2E14");
+            box(c.x + 1, c.y + 1, c.w - 2, c.h - 2, COL.night);
+          }
+          const g = fineCv.getContext("2d");
+          // every text fits here: the render stops on one that does not (labelFit at the start)
+          const { k, lines, th } = labelFit(c, s, o.lit ? 6 : 4, o.lit);
+          const top = c.y * 2 + Math.round((c.h * 2 - th) / 2);
+          lines.forEach((l, i) => {
+            const x = Math.round(c.x * 2 + (c.w * 2 - smallW(l) * k) / 2);
+            if (o.lit) litText(g, l, x, top + i * 6 * k, k);
+            else smallText(g, l, x, top + i * 6 * k, palCss(o.color), k);
+          });
+        };
+        // h&w's colours (design guide): h and "hackers" teal, & a muted grey, w and "wizards"
+        // purple; on a dark ground the same hues lifted only as far as legibility needs
+        const HW = [BRAND.teal, BRAND.ampersand, BRAND.purple];
+        const HW_DARK = ["#2A93A8", "#9197AC", "#A24FED"];
+        // The h&w mark: "h&w" in the title font, the name under it where the box allows.
+        const hwMark = (c) => {
+          const name = smallW("hackers&wizards") <= c.w * 2 - 4 && c.h >= 18;
+          const top = c.y + Math.round((c.h - (name ? 13 : 8)) / 2) - 1;
+          const x0 = c.x + Math.round((c.w - 24) / 2);
+          ["h", "&", "w"].forEach((ch, i) => cellTxt(ch, x0 + i * 8, top, HW[i]));
+          if (!name) return;
+          let x = Math.round(c.x * 2 + (c.w * 2 - smallW("hackers&wizards")) / 2);
+          ["hackers", "&", "wizards"].forEach((part, i) => {
+            smallText(fineCv.getContext("2d"), part, x, (top + 10) * 2, palCss(HW[i]));
+            x += smallW(part) + 1;
+          });
+        };
+        // The h&w sticker on a laptop lid: the lid stays the picture's own, the sticker sits on it,
+        // its letters one cell per font pixel.
+        const sticker = (c) => {
+          const [w, h] = [smallW("h&w", MARK) + 4, 9];
+          // the wizard's lid, seen from behind: grey, the mark printed flat on it, centred on the
+          // fine grid (half cells), so an odd margin splits evenly
+          lidBack(c);
+          const g = fineCv.getContext("2d");
+          let fx = c.x * 2 + (c.w - w) + 4;
+          const fy = c.y * 2 + (c.h - h) + 4;
+          ["h", "&", "w"].forEach((ch, i) => {
+            smallText(g, ch, fx, fy, palCss(HW_DARK[i]), 2, MARK);
+            fx += (smallW(ch, MARK) + 1) * 2;
+          });
+        };
+        // A customer logo painted on its board on a half-cell grid, strictly from the file's own
+        // shapes: a half-cell is painted where the shapes cover at least 40 % of it (measured at
+        // 8x8 samples), in the palette's colour nearest to the logo's own there; the lighting is
+        // the board's, not the letters'.
+        const LOGO_F = 2;
+        const fineCache = new Map();
+        const fineLogo = (c, img) => {
+          const key = `${img.src}|${c.w}x${c.h}`;
+          let L = fineCache.get(key);
+          if (L) return L;
+          const w0 = c.w * LOGO_F;
+          const h0 = c.h * LOGO_F;
+          const k = Math.min((w0 - 8 * LOGO_F) / img.width, (h0 - 8 * LOGO_F) / img.height);
+          const w = Math.round(img.width * k);
+          const h = Math.round(img.height * k);
+          const S = 8;
+          const big = document.createElement("canvas");
+          big.width = w0 * S;
+          big.height = h0 * S;
+          const bg = big.getContext("2d", { willReadFrequently: true });
+          bg.drawImage(img, Math.round((w0 - w) / 2) * S, Math.round((h0 - h) / 2) * S, w * S, h * S);
+          const bd = bg.getImageData(0, 0, big.width, big.height).data;
+          L = document.createElement("canvas");
+          L.width = w0;
+          L.height = h0;
+          const g = L.getContext("2d", { willReadFrequently: true });
+          const im = g.createImageData(w0, h0);
+          const d = im.data;
+          for (let y = 0; y < h0; y++)
+            for (let x = 0; x < w0; x++) {
+              let [r, gg, b, n] = [0, 0, 0, 0];
+              for (let j = 0; j < S; j++)
+                for (let i = 0; i < S; i++) {
+                  const p = ((y * S + j) * big.width + x * S + i) * 4;
+                  r += bd[p] * bd[p + 3];
+                  gg += bd[p + 1] * bd[p + 3];
+                  b += bd[p + 2] * bd[p + 3];
+                  n += bd[p + 3];
+                }
+              if (n < 0.4 * 255 * S * S) continue;
+              const q = nearestPal(Math.round(r / n), Math.round(gg / n), Math.round(b / n));
+              d.set([q[0], q[1], q[2], 255], (y * w0 + x) * 4);
+            }
+          g.putImageData(im, 0, 0);
+          fineCache.set(key, L);
+          return L;
+        };
+        // Departure board: the slot's own text, else the map places, two per line.
+        const boardText = (s) =>
+          s.text ??
+          PLACES.map((p, i) => (i % 2 ? ` · ${p.name}\n` : p.name))
+            .join("")
+            .trim();
+        // A lid seen from behind: the lid's grey, lit along its top and left edges, never content.
+        const lidBack = (c) => {
+          box(c.x, c.y, c.w, c.h, "#434A63");
+          box(c.x, c.y, c.w, 1, "#5E6782");
+          box(c.x, c.y, 1, c.h, "#545C77");
+          box(c.x, c.y + c.h - 1, c.w, 1, "#353B50");
+        };
+        // the screen session: up to four lines, a command typed at 22 characters a second, or
+        // faster so the last line still holds 0.6 s before the set closes 4.4 s after it opens
+        // (scripts/score.mjs types along)
+        const CALLOUT_ROWS = 4;
+        const CALLOUT_CPS = (() => {
+          const ls = SCRIPT.slice(0, CALLOUT_ROWS);
+          const typedChars = ls.filter((l) => !l.startsWith("✓")).reduce((n, l) => n + l.length, 0);
+          return Math.max(22, typedChars / Math.max(0.5, 4.4 - 0.6 - 0.55 * (ls.length - 1)));
+        })();
+        // A laptop screen is too small to read, so a CRT in a wooden frame shows its session large,
+        // switching on from a bright line. a: 0..1 opening.
+        const callout = (t, a) => {
+          const s = (HUB.slots ?? []).find((x) => x.callout);
+          const win = slots("window")[0];
+          if (!s || !win || a <= 0 || !SCRIPT.length) return;
+          const lines = SCRIPT.slice(0, CALLOUT_ROWS);
+          const rows = lines.length;
+          const longest = Math.max(...lines.map((l) => measureCells(l) / 2));
+          const w = longest + 12;
+          const h = rows * 7 + 5;
+          const wc = cellOf(win);
+          const sc = cellOf(s);
+          const x = wc.x + 6;
+          const y = wc.y + wc.h - h - 4;
+          // the cable from the laptop up to the set
+          const [x0, y0, x1, y1] = [sc.x + (sc.w >> 1), sc.y, x + 12, y + h + 3];
+          const n = Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0));
+          for (let i = 0; i <= n; i++)
+            box(Math.round(lerp(x0, x1, i / n)), Math.round(lerp(y0, y1, i / n)), 1, 1, "#2A1A0C");
+          const hh = Math.max(1, Math.round((h + 6) * a));
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(x - 3, y - 3 + ((h + 6 - hh) >> 1), w + 6, hh);
+          ctx.clip();
+          box(x - 3, y - 3, w + 6, h + 6, "#2A1A0C");
+          box(x - 2, y - 2, w + 4, h + 4, "#8A5A2B");
+          box(x - 2, y - 2, w + 4, 1, "#B5832F");
+          box(x - 1, y - 1, w + 2, h + 2, "#2A1A0C");
+          box(x, y, w, h, "#0B2730");
+          for (let j = 1; j < h; j += 2) box(x, y + j, w, 1, "#08202A");
+          box(x, y, w, 1, "#1F5560");
+          [
+            [x - 3, y - 3],
+            [x + w + 1, y - 3],
+            [x - 3, y + h + 1],
+            [x + w + 1, y + h + 1],
+          ].forEach(([cx, cy]) => box(cx, cy, 2, 2, "#E2B457"));
+          if (a < 1) box(x, y + (h >> 1), w, 1, COL.snow);
+          // a command types, its result appears at once, each holds 0.55 s
+          let left = t;
+          let k = 0;
+          let shown = 0;
+          for (; k < rows; k++) {
+            const d = lines[k].startsWith("✓") ? 0 : lines[k].length / CALLOUT_CPS;
+            shown = Math.floor(clamp(left / Math.max(d, 1e-6)) * lines[k].length);
+            if (left < d) break;
+            left -= d + 0.55;
+            if (left < 0 || k === rows - 1) break;
+          }
+          k = Math.min(k, rows - 1);
+          if (a < 1) return ctx.restore();
+          const keep = ctx;
+          ctx = fineTop.getContext("2d");
+          for (let r = 0; r <= k; r++) {
+            const line = lines[r];
+            const top = y + 2 + r * 7;
+            const n = r === k ? shown : line.length;
+            const color = line.startsWith(">") ? COL.amber : line.startsWith("✓") ? COL.green : COL.nightInk;
+            txt(line, (x + 6) * 2, top * 2 + 8, {
+              size: 8,
+              k: 1,
+              color,
+              shadow: false,
+              reveal: n,
+            });
+            if (r === k && n < line.length + 1 && Math.floor(t * 3) % 2)
+              box((x + 6) * 2 + n * 8, top * 2 + 1, 6, 7, COL.green);
+          }
+          ctx = keep;
+          ctx.restore();
+        };
+        // A paper gift tag, one fixed size (the slot's), hanging on twine from the gift's bow up
+        // and to the left; at most two lines, the second cut short with an ellipsis.
+        const tagCells = (c, s) => {
+          const { x, y, w, h } = c;
+          const O = "#4A2E14";
+          const shape = (dx, dy, col) => {
+            for (let j = 0; j < h; j++) {
+              const inset = Math.max(0, 2 - Math.min(j, h - 1 - j));
+              box(x + dx + inset, y + dy + j, w - inset, 1, col);
+            }
+          };
+          shape(1, 1, "#1A0F08");
+          shape(0, 0, O);
+          // the plaque's dark inner panel inside the wooden outline
+          for (let j = 1; j < h - 1; j++) {
+            const inset = Math.max(0, 2 - Math.min(j, h - 1 - j)) + 1;
+            box(x + inset, y + j, w - inset - 1, 1, COL.night);
+          }
+          const cx = x + (w >> 1);
+          box(cx, y + 1, 1, 1, O);
+          light(c, 0.12);
+          // the tag hangs straight down from its gift's bow, in front of its own gift
+          for (let j = y - 7; j <= y + 1; j++) box(cx, j, 1, 1, "#B08A4E");
+          const lines = tagFit(s, w) ?? [];
+          const th = lines.length * 6;
+          // one fine pixel lower when the first line carries an umlaut's dots above it
+          const top = y * 2 + Math.round((h * 2 - th) / 2) + (/[ÄÖÜ]/i.test(lines[0] ?? "") ? 1 : 0);
+          lines.forEach((l, i) =>
+            litText(
+              fineTop.getContext("2d"),
+              l,
+              Math.round((x + 3) * 2 + ((w - 4) * 2 - smallW(l)) / 2),
+              top + i * 6,
+            ),
+          );
+        };
+        const CROWN = [
+          ".o....o....o.",
+          "oho..oho..oho",
+          "oyyooyyyooyyo",
+          "oyyyyyyyyyyyo",
+          "oYeYYYxYYYeYo",
+          "oYYYYYYYYYYYo",
+          "oAAAAAAAAAAAo",
+          ".ooooooooooo.",
+        ];
+        const portalRing = (cx, cy, r, st, inner) => {
+          if (r <= 0) return;
+          const t = real(st);
+          const ry = r * 1.25;
+          if (inner) {
+            ctx.save();
+            ctx.beginPath();
+            ctx.ellipse(cx, cy, r, ry, 0, 0, Math.PI * 2);
+            ctx.clip();
+            inner();
+            ctx.restore();
+          }
+          // the rim: painted sparks, teal and purple, circling the opening
+          const n = Math.min(90, Math.max(10, Math.round(r / 9)));
+          for (let i = 0; i < n; i++) {
+            const a = (i / n) * Math.PI * 2 + t * 1.8;
+            const d = 1.04 + 0.06 * hash(i + Math.floor(t * 10));
+            prop(
+              i % 2 ? "spark-teal" : "spark-purple",
+              (cx + Math.cos(a) * r * d) / PX,
+              (cy + Math.sin(a) * ry * d) / PX,
+            );
+          }
+        };
+        // Leaving the customer's workshop is one hard cut, never a dissolve of two pictures:
+        // o.plain draws the plain h&w picture alone.
+        // t is story time; the hub's life (lights, snow, sparkle, the belt) runs on the
+        // frame clock, and so does the callout's typing (o.calloutT, story seconds since it opened)
+        function drawHub(T, st, o = {}) {
+          const t = real(st);
+          ctx.imageSmoothingEnabled = false;
+          // the plain h&w picture: the game's title screen file, on the art grid
+          if (o.plain) {
+            drawSnapped(SNAP.base, T);
+            return;
+          }
+          drawSnapped(SNAP.hub, T);
+          // conveyor: the gifts (a painted layer over the gift-free belt, image origin
+          // belt.layer) ride right, from behind the elf at the belt's left end into the machine
+          // at its right; drawn twice one belt length apart and clipped to the belt. Past the elf
+          // a gift dissolves in cell by cell over ENTRY image pixels, never cut by a hard edge.
+          const belt = slots("belt")[0];
+          // whole cells, so tags on the belt stay on their grid
+          const shift = belt
+            ? Math.round(((((real(o.beltT ?? st) * (belt.speed ?? 20)) % belt.w) + belt.w) % belt.w) / CELL) *
+              CELL
+            : 0;
+          if (belt?.layer && giftImg.width) {
+            const g = beltCv.getContext("2d");
+            const c = (v) => Math.round(v / CELLD);
+            g.clearRect(0, 0, beltCv.width, beltCv.height);
+            for (const k of [0, -1]) g.drawImage(SNAP.gift, c(belt.layer[0] + shift + k * belt.w), 0);
+            const [x0, x1, z] = [c(belt.x), c(belt.x + belt.w), c(ENTRY)];
+            g.clearRect(0, 0, x0, beltCv.height);
+            g.clearRect(x1, 0, beltCv.width, beltCv.height);
+            for (let x = x0; x < x0 + z; x++)
+              for (let y = 0; y < beltCv.height; y++)
+                if (hash(x * 131 + y * 7) >= (x - x0) / z) g.clearRect(x, y, 1, 1);
+            drawSnapped(beltCv, T, 0, belt.layer[1]);
+          }
+          // overlays, on the picture's cell grid (buildCells)
+          const main = ctx;
+          const lo = cellCv.getContext("2d", { willReadFrequently: true });
+          const hi = cellTop.getContext("2d", { willReadFrequently: true });
+          // drawing in cells, D art pixels each
+          for (const g of [lo, hi]) {
+            g.setTransform(1, 0, 0, 1, 0, 0);
+            g.clearRect(0, 0, cellCv.width, cellCv.height);
+            g.setTransform(D, 0, 0, D, 0, 0);
+          }
+          for (const c of [fineCv, fineTop]) c.getContext("2d").clearRect(0, 0, c.width, c.height);
+          let tag = 0;
+          let tip = null;
+          const fine = [];
+          for (const s of HUB.slots ?? []) {
+            // a customer logo's board is painted whole over its blank, fringe included
+            const board = s.kind === "logo" && s.src !== "hw" && V.customerLogo;
+            const masked = MASKED.has(s.kind) && !board;
+            ctx = masked ? lo : hi;
+            const onBelt = belt && s.y >= belt.y && s.y < belt.y + belt.h;
+            const r = s.kind === "tag" && onBelt ? { ...s, x: s.x + shift } : s;
+            let c = cellOf(r);
+            const flat = s.quad && grab(c, [lo, hi]);
+            if (s.kind === "logo" && s.src === "hw") sticker(c);
+            else if (s.kind === "logo") {
+              box(c.x, c.y, c.w, c.h, CREAM);
+              if (board) fine.push(c);
+              else hwMark(c);
+            } else if (s.kind === "label") {
+              // a plate with "hang" (image y) hangs from two strings tied to the beam above it
+              // (on the unmasked layer: the strings run outside the plate's blank)
+              if (s.hang) {
+                ctx = hi;
+                for (const x of [c.x + (c.w >> 1), c.x + c.w - 3])
+                  for (let j = Math.round(s.hang / CELL); j < c.y; j++) box(x, j, 1, 1, "#B08A4E");
+                ctx = lo;
+              }
+              labelCells(c, s.text, { lit: true });
+            } else if (s.kind === "board") labelCells(c, boardText(s), { bg: COL.night, color: COL.amber });
+            else if (s.kind === "doorsign") labelCells(c, V.doorTitle, { bg: COL.night, color: COL.amber });
+            else if (s.kind === "progress") {
+              // the machine's screen is tiny: a bar on it, the reading in a tooltip above;
+              // o.progress (0..1) takes it from its resting value to 100 %
+              const rest = s.value ?? 87;
+              const v = Math.round(
+                o.progress === undefined ? rest * clamp((t % 6) / 3) : lerp(rest, 100, o.progress),
+              );
+              box(c.x, c.y, c.w, c.h, COL.night);
+              box(c.x, c.y, Math.round(c.w * (v / 100)), c.h, COL.green);
+              tip = { s, v };
+            } else if (s.kind === "tag" && (s.text ?? TEAMS[tag]) !== undefined) {
+              // a tag rides its gift and, like the gift, shows only on the visible belt; a gift
+              // beyond the last team carries no tag
+              const label = s.text ?? TEAMS[tag++];
+              const span = onBelt && cellOf(belt);
+              const clipped = [ctx, fineTop.getContext("2d")];
+              if (span)
+                clipped.forEach((g, i) => {
+                  g.save();
+                  g.beginPath();
+                  g.rect(span.x * (i + 1), 0, span.w * (i + 1), 1e4);
+                  g.clip();
+                });
+              // shown once its gift is half through the entry dissolve
+              const shown = (x) => !span || x >= belt.x + ENTRY / 2;
+              if (shown(r.x)) tagCells(c, label);
+              // its copy one belt length back, entering with its gift from the left
+              if (span) {
+                if (shown(r.x - belt.w)) tagCells(cellOf({ ...r, x: r.x - belt.w }), label);
+                clipped.forEach((g) => g.restore());
+              }
+            }
+            if (s.quad) c = warp(c, s.quad, flat, [lo, hi]);
+            // big plates lit evenly (a fall across one quantises to a band where the palette holds
+            // two creams), small ones with the fall of the light
+            const big = ["logo", "board", "doorsign"].includes(s.kind);
+            if ((masked || board) && s.src !== "hw") light(c, big ? 0 : 0.18);
+          }
+          ctx = lo;
+          lo.setTransform(1, 0, 0, 1, 0, 0);
+          lo.globalCompositeOperation = "destination-in";
+          lo.drawImage(cellMask, 0, 0);
+          lo.globalCompositeOperation = "source-over";
+          lo.setTransform(D, 0, 0, D, 0, 0);
+          ctx = hi;
+          // one art pixel at image point (x, y)
+          const A = 1 / D;
+          const cell = (x, y, c) => box(Math.round(x / CELLD) * A, Math.round(y / CELLD) * A, A, A, c);
+          // a crown point in the layout crowns the robot: a gold crown, and a few twinkles round it
+          const cr = HUB.points?.crown;
+          if (cr) {
+            const bob = Math.round(Math.sin(t * 3) * 0.6);
+            const pal = {
+              o: "#3A2210",
+              h: "#FFF1B8",
+              y: "#FBBF24",
+              Y: COL.amber,
+              A: COL.amberDark,
+              e: "#EF4444",
+              x: "#2DD4BF",
+            };
+            const [qx, qy] = [Math.round(cr[0] / CELL) - 6, Math.round(cr[1] / CELL) - 7 + bob];
+            CROWN.forEach((row, j) =>
+              [...row].forEach((ch, i) => pal[ch] && box(qx + i, qy + j, 1, 1, pal[ch])),
+            );
+            for (let k = 0; k < 3; k++) {
+              const p = (t * 0.7 + k / 3) % 1;
+              if (p > 0.4) continue;
+              const x = qx + [-3, 15, 6][k];
+              const y = qy + [2, 1, -3][k];
+              box(x, y, A, A, "#FFF1B8");
+              if (p > 0.1 && p < 0.3) {
+                box(x - A, y, A, A, COL.amber);
+                box(x + A, y, A, A, COL.amber);
+                box(x, y - A, A, A, COL.amber);
+                box(x, y + A, A, A, COL.amber);
+              }
+            }
+          }
+          // ambient: lights cycle colour, snow in the windows, crystal sparkle
+          lit(t).forEach(([x, y, c]) => cell(x, y, c));
+          slots("window").forEach((w, wi) => {
+            const c = cellOf(w);
+            for (let i = 0; i < 90; i++) {
+              const s = i + wi * 100;
+              const fy = (hash(s) * 1.2 + t * (0.06 + 0.06 * hash(s + 1))) % 1.2;
+              const fx = hash(s + 2) + Math.sin(t + i) * 0.01;
+              // in art pixels, on the glass cells only
+              const sx = c.x * D + Math.floor(fx * c.w * D);
+              const sy = c.y * D + Math.floor(fy * c.h * D);
+              const big = hash(s + 3) > 0.75 ? 2 : 1;
+              if (fy < 1 && fx >= 0 && fx < 1 && PANE[Math.floor(sy / D) * CW + Math.floor(sx / D)])
+                box(sx * A, sy * A, big * A, big * A, COL.snow);
+            }
+          });
+          const [cx, cy] = point("crystal");
+          const charge = o.charge ?? 0;
+          for (let i = 0; i < 8 + charge * 16; i++) {
+            const a = i * 0.8 + t * (2 + charge * 4);
+            const d = (6 + charge * 26) * (0.6 + 0.4 * hash(i + Math.floor(t * 6)));
+            cell(cx + Math.cos(a) * d, cy + Math.sin(a) * d, i % 2 ? COL.green : "#5EEAD4");
+          }
+          // the beam from the crystal up into the portal, from the moment the portal opens
+          if (o.beam) {
+            const top = Math.round(point("portal")[1] / CELL);
+            box(Math.round(cx / CELLD) * A, top, A, Math.round(cy / CELL) - top, "#5EEAD4");
+          }
+          callout(real(o.calloutT ?? st), o.callout ?? 0);
+          lo.setTransform(1, 0, 0, 1, 0, 0);
+          hi.setTransform(1, 0, 0, 1, 0, 0);
+          lo.drawImage(cellTop, 0, 0);
+          quantise(lo);
+          ctx = main;
+          ctx.imageSmoothingEnabled = false;
+          ctx.drawImage(cellCv, T.x0, T.y0, Math.round(CW * CELL * T.s), Math.round(CH * CELL * T.s));
+          const fg = fineCv.getContext("2d");
+          fg.imageSmoothingEnabled = false;
+          fg.globalCompositeOperation = "destination-in";
+          fg.drawImage(cellMask, 0, 0, fineCv.width, fineCv.height);
+          fg.globalCompositeOperation = "source-over";
+          fg.drawImage(fineTop, 0, 0);
+          ctx.drawImage(fineCv, T.x0, T.y0, Math.round(CW * CELL * T.s), Math.round(CH * CELL * T.s));
+          fine.forEach((c) =>
+            ctx.drawImage(
+              fineLogo(c, custLogo),
+              T.x0 + c.x * CELL * T.s,
+              T.y0 + c.y * CELL * T.s,
+              c.w * CELL * T.s,
+              c.h * CELL * T.s,
+            ),
+          );
+          // the build reading, a game panel on the film's own grid; o.onTip takes it instead,
+          // to draw it once over a zoom step's two passes
+          if (tip && o.tips) (o.onTip ?? buildTip)(T, tip, o);
+        }
+        function buildTip(T, tip, o) {
+          const R = scr(T, tip.s);
+          const v = tip.v;
+          // "87 %" in German, "87%" in English
+          const label = `${tip.s.text} ${v}${EN ? "" : " "}%`;
+          const w = Math.max(564, measure(label, 24) + 96);
+          const P = {
+            x: clamp(R.x + R.w / 2 - w / 2, SAFE, 1920 - SAFE - w),
+            y: R.y - 156,
+            w,
+            h: 102,
+          };
+          // done: confetti bursts from behind the tooltip, in the scene's own pixels
+          const q = o.burst ?? -1;
+          const z = Math.max(1, Math.round(CELLD * T.s));
+          if (q >= 0 && q < 1.4)
+            for (let k = 0; k < 28; k++) {
+              if (hash(k + 50) > 1.4 - q) continue;
+              const a = k * 0.9 + hash(k) * 0.5;
+              const r = q * (160 + 120 * hash(k + 3));
+              ctx.fillStyle = [COL.amber, COL.green, "#EF4444", "#7DD3FC"][k % 4];
+              ctx.fillRect(
+                Math.round((P.x + P.w / 2 + Math.cos(a) * r * 1.4) / z) * z,
+                Math.round((P.y + P.h / 2 + Math.sin(a) * r + q * q * 120) / z) * z,
+                z,
+                z,
+              );
+            }
+          plate(P.x, P.y, P.w, P.h, COL.night, COL.teal, PX, 0.92);
+          txt(label, P.x + P.w / 2, P.y + 48, {
+            size: 24,
+            align: "center",
+            color: v === 100 ? COL.green : COL.snow,
+          });
+          const bx = Math.round((P.x + 24) / PX) * PX;
+          const bw = Math.round((P.w - 48) / PX) * PX;
+          const by = Math.round((P.y + 66) / PX) * PX;
+          ctx.fillStyle = COL.nightMuted;
+          ctx.fillRect(bx, by, bw, 12);
+          ctx.fillStyle = COL.green;
+          ctx.fillRect(bx, by, Math.round((bw * v) / 100 / PX) * PX, 12);
+        }
+        function greetingBand(a) {
+          ctx.globalAlpha = a;
+          ctx.fillStyle = "#05080c";
+          ctx.fillRect(0, 900, 1920, 180);
+          ctx.globalAlpha = a;
+          ctx.fillStyle = COL.teal;
+          ctx.fillRect(0, 900, 1920, 6);
+          ctx.globalAlpha = 1;
+          const hi = V.customerName ? `${WORDS.hello}, ${V.customerName}!` : `${WORDS.hello}!`;
+          const size = measure(hi, 48) <= 1728 ? 48 : 40;
+          txt(hi, 960, 976, {
+            size,
+            align: "center",
+            color: COL.amber,
+            alpha: a,
+          });
+          // the sign-off with the h&w wordmark in its colours, lifted for the dark band
+          const parts = [
+            ["hackers", HW_DARK[0]],
+            ["&", HW_DARK[1]],
+            ["wizards", HW_DARK[2]],
+            [` · ${V.title}`, COL.snow],
+          ];
+          let x = 960 - measure(parts.map((p) => p[0]).join(""), 24) / 2;
+          parts.forEach(([part, color]) => {
+            txt(part, x, 1024, { size: 24, color, alpha: a });
+            x += measure(part, 24);
+          });
+        }
+        let introSteps;
+        function sceneHubIntro(t) {
+          const [px, py] = point("portal");
+          const iw = hubImg.width;
+          const ih = hubImg.height;
+          // the whole room under the greeting band, a step in once the band is gone, the window,
+          // then the portal; the step in holds the camera still (zoomSteps)
+          const cam = (u) =>
+            camAt(
+              [
+                [0, iw * 0.5, ih * 0.5, 1.0, 1],
+                [2.2, iw * 0.5, ih * 0.5, 1.0, 1],
+                [2.5, iw * 0.5, ih * 0.5, 1.5, 1],
+                [3.0, iw * 0.28, ih * 0.45, 1.5, 1],
+                [6.1, iw * 0.28, ih * 0.45, 1.5, 1],
+                [7.0, px, py, 1.5, 1],
+              ],
+              u,
+            );
+          introSteps ??= zoomSteps(cam, 0, CUTS[0]);
+          // the staff flares on frame 0 and settles, as the charge does before the portal
+          const T = hubThrough(cam, introSteps, t, (T, extra) =>
+            drawHub(T, t, {
+              ...extra,
+              charge: Math.max(clamp((t - 6.6) / 0.8), 0.45 * clamp(1 - t / 1.2)),
+              callout: clamp((t - 2.9) * 4) * clamp((6.1 - t) * 4),
+              calloutT: t - 2.9,
+              beam: t >= 7.4,
+              // the belt reaches the closing move's resting place as the step in starts and
+              // holds there, so no gift is mid-entry while the zoom frames the belt
+              beltT: Math.min(t, 2.2) - 2.2,
+            }),
+          );
+          // the greeting band from frame 0, on the game's own strip style along the bottom,
+          // where the picture's foreground is darkest; the poster sets it under the whole picture
+          if (t < 2.2) greetingBand(clamp((2.2 - t) * 4));
+          // the portal opens on the map at full size: an iris, never a scaled miniature
+          const o = t - 7.4;
+          if (o > 0) {
+            const R = scr(T, { x: px, y: py, w: 0, h: 0 });
+            const r = o < 0.6 ? lerp(0, 150, ease(o / 0.6)) : lerp(150, 1500, ease((o - 0.6) / 0.5));
+            portalRing(R.x, R.y, r, t, () => sceneMap(Math.max(t, CUTS[0]), true));
+          }
+        }
+        // The game's title screen, in game pixels (320x180) on the plain h&w picture.
+        const GAME = {
+          // the marquee board's inner panel, as slot B in the film picture
+          level: { x: 239, y: 12, w: 52, h: 18 },
+          press: { x: 101, y: 25, w: 40, h: 20 },
+          staff: [163, 61],
+        };
+        // The boards' lettering as examples/present/shell/title/plaques.ts paints it: a 3x5 font at
+        // one game pixel, amber with a highlight row and a drop shadow, centred in the panel.
+        const BOARD_FONT = {
+          A: ".#./#.#/###/#.#/#.#",
+          E: "###/#../##./#../###",
+          L: "#../#../#../#../###",
+          P: "##./#.#/##./#../#..",
+          R: "##./#.#/##./#.#/#.#",
+          S: ".##/#../.#./..#/##.",
+          T: "###/.#./.#./.#./.#.",
+          V: "#.#/#.#/#.#/#.#/.#.",
+          0: ".#./#.#/#.#/#.#/.#.",
+          2: "##./..#/.#./#../###",
+          7: "###/..#/.#./.#./.#.",
+        };
+        const LIT = { top: "#fde68a", fill: "#f59e0b", shadow: "#2a1608" };
+        const DIM = { top: "#b45309", fill: "#92400e", shadow: "#2a1608" };
+        // The title screen's boards and its life; a: the board text's opacity
+        // the title screen's game pixel size G and a game pixel's screen position
+        const titleGrid = (T) => {
+          const G = (hubImg.width / 320) * T.s;
+          return [G, (x) => T.x0 + x * G, (y) => T.y0 + y * G];
+        };
+        function gameTitle(T, st, a) {
+          const t = real(st);
+          const [G, gx, gy] = titleGrid(T);
+          const lineW = (l) => [...l].reduce((w, ch, i) => w + (i ? 1 : 0) + (ch === " " ? 2 : 3), 0);
+          const board = (lines, p, ink, al) => {
+            const w = Math.max(...lines.map(lineW));
+            const x0 = p.x + Math.floor((p.w - w) / 2);
+            const y0 = p.y + Math.floor((p.h - (lines.length * 7 - 1)) / 2);
+            ctx.globalAlpha = al;
+            for (const shadow of [true, false])
+              lines.forEach((l, row) => {
+                let x = x0 + Math.floor((w - lineW(l)) / 2);
+                for (const ch of l) {
+                  if (ch !== " ")
+                    BOARD_FONT[ch].split("/").forEach((bits, y) =>
+                      [...bits].forEach((b, dx) => {
+                        if (b !== "#") return;
+                        ctx.fillStyle = shadow ? ink.shadow : y ? ink.fill : ink.top;
+                        ctx.fillRect(
+                          Math.round(gx(x + dx)),
+                          Math.round(gy(y0 + row * 7 + y + (shadow ? 1 : 0))),
+                          Math.round(G),
+                          Math.round(G),
+                        );
+                      }),
+                    );
+                  x += (ch === " " ? 2 : 3) + 1;
+                }
+              });
+            ctx.globalAlpha = 1;
+          };
+          const glow = (x, y, r, rgb, al) => {
+            const g = ctx.createRadialGradient(gx(x), gy(y), 0, gx(x), gy(y), r);
+            g.addColorStop(0, `rgba(${rgb},${al})`);
+            g.addColorStop(1, `rgba(${rgb},0)`);
+            ctx.fillStyle = g;
+            ctx.fillRect(gx(x) - r, gy(y) - r, r * 2, r * 2);
+          };
+          // as the game's title scene keeps it living: snow past the window, the conveyor's
+          // running lights, the glow at the staff
+          for (let i = 0; i < 34; i++) {
+            const sp = 12 + 8 * hash(i + 1);
+            const y = 20 + ((hash(i) * 4 + (t * sp) / 66) % 1) * 66;
+            const x = 24 + hash(i + 2) * 66 + Math.sin(t + i) * 2;
+            if (x < 29 || x > 90 || y < 24 || y > 86) continue;
+            ctx.fillStyle = "#e8f1f2";
+            ctx.fillRect(Math.round(gx(x)), Math.round(gy(y)), G, G);
+          }
+          [96, 114, 134, 152, 172, 194, 214, 234].forEach((x, i) => {
+            const ph = ((t * 1000 + 2100 - i * 150) % 2400) / 300;
+            glow(x, 146, 5 * G, "245,158,11", ph < 2 ? 0.1 + 0.6 * (1 - Math.abs(ph - 1)) : 0.1);
+          });
+          // the crystal pulses and sheds a spark every 250 ms that drifts out over 600 ms; the
+          // door stays shut and dark until a player presses Start
+          const [sx, sy] = GAME.staff;
+          glow(sx, sy, (6 + Math.sin(t * 4.5) * 1.2) * G, "45,212,191", 0.8);
+          for (let k = Math.floor(t / 0.25) - 2; k <= Math.floor(t / 0.25); k++) {
+            const age = (t - k * 0.25) / 0.6;
+            if (age < 0 || age > 1) continue;
+            const ang = hash(k + 900) * Math.PI * 2;
+            const d = (4 + 8 * hash(k + 901)) * age * 0.6;
+            const z = Math.max(1, Math.round(G * (1 - age)));
+            ctx.fillStyle = "#b8fff2";
+            ctx.fillRect(
+              Math.round(gx(sx + Math.cos(ang) * d)),
+              Math.round(gy(sy + Math.sin(ang) * d)),
+              z,
+              z,
+            );
+          }
+          if (a <= 0) return;
+          board(["LEVEL 2027"], GAME.level, LIT, a);
+          // the blink switches the letters' light every 600 ms, as in the game
+          board(["PRESS", "START"], GAME.press, Math.floor(t / 0.6) % 2 ? DIM : LIT, a);
+        }
+        // The title screen's strip, a its opacity; call: the QR call's, which comes in with the
+        // end card
+        function gameStrip(T, a, call) {
+          const [G, gx, gy] = titleGrid(T);
+          const pix = (lines, [x, y], color, al, size = 8) => {
+            ctx.save();
+            ctx.globalAlpha = al;
+            ctx.font = `${size * G}px ${PIXEL}`;
+            ctx.textAlign = "center";
+            ctx.textBaseline = "top";
+            ctx.fillStyle = color;
+            lines.forEach((l, k) => ctx.fillText(l, gx(x), gy(y + k * 11)));
+            ctx.restore();
+          };
+          if (a <= 0) return;
+          // the game's name and how to start, on its solid strip
+          ctx.globalAlpha = a;
+          ctx.fillStyle = "#05080c";
+          ctx.fillRect(gx(0), gy(154), 320 * G, 26 * G);
+          ctx.globalAlpha = 1;
+          // the game's name as a title, in the film's quotation marks
+          pix([EN ? "“BRING THE PRESENT HOME”" : "„BRING THE PRESENT HOME“"], [160, 157], "#f59e0b", a);
+          // the game's "ENTER OR TAP TO START" becomes the film's one call, to the QR code beside
+          // it on the strip, from the end card to the last frame: it holds wherever a player stops
+          // and in a forwarded file
+          const al = a * call;
+          if (al <= 0) return;
+          pix([V.scanLine], [160, 169], "#e8f1f2", al);
+          const n = QR.getModuleCount();
+          const m = Math.max(1, Math.floor((26 * G) / (n + 8)));
+          const q = (n + 8) * m;
+          const qx = Math.round(T.x0 + 320 * G - SAFE - q);
+          const qy = Math.round(gy(167) - q / 2);
+          ctx.globalAlpha = al;
+          ctx.fillStyle = "#FFFFFF";
+          ctx.fillRect(qx, qy, q, q);
+          ctx.fillStyle = "#000000";
+          for (let r = 0; r < n; r++)
+            for (let c = 0; c < n; c++)
+              if (QR.isDark(r, c)) ctx.fillRect(qx + (c + 4) * m, qy + (r + 4) * m, m, m);
+          ctx.globalAlpha = 1;
+        }
+        // The title screen's own life while the end card shows, beyond what the game's title
+        // scene animates: the hearth flickers and the string lights twinkle. a: 0..1, gone by
+        // the last frame, which is the game's title screen.
+        const HEARTH = [640, 455];
+        function titleLife(T, st, a) {
+          if (a <= 0) return;
+          const t = real(st);
+          const R = scr(T, { x: HEARTH[0], y: HEARTH[1], w: 0, h: 0 });
+          const r = 120 * T.s;
+          const fl = 0.55 + 0.25 * Math.sin(t * 9.1) + 0.2 * Math.sin(t * 23.7 + 1);
+          const g = ctx.createRadialGradient(R.x, R.y, 0, R.x, R.y, r);
+          g.addColorStop(0, `rgba(255,160,60,${0.2 * fl * a})`);
+          g.addColorStop(1, "rgba(255,160,60,0)");
+          ctx.save();
+          ctx.globalCompositeOperation = "lighter";
+          ctx.fillStyle = g;
+          ctx.fillRect(R.x - r, R.y - r, 2 * r, 2 * r);
+          ctx.restore();
+          const z = CELLD * T.s;
+          ctx.globalAlpha = a;
+          lit(t).forEach(([x, y, c]) => {
+            ctx.fillStyle = c;
+            ctx.fillRect(T.x0 + Math.round(x / CELLD) * z, T.y0 + Math.round(y / CELLD) * z, z, z);
+          });
+          ctx.globalAlpha = 1;
+        }
+        // End card: the greeting, the nod and the kit invitation, in one panel right of the
+        // wizard and his staff, under the LEVEL board and above the strip, so he and the boards stay
+        // whole; the strip carries the QR code and the mail the link. Every line is at least the
+        // phone minimum (32 px glyphs): the greeting at 40 where it fits on one line, and a line
+        // too long breaks at spaces. a: 0..1 its rise from below, al its opacity.
+        const CARD = { x0: 1032, x1: 1824, top: 216, y1: 900, pad: 24 };
+        const CARD_ROOM = CARD.x1 - CARD.x0 - 96;
+        const cardLines = () =>
+          [
+            [V.customerName, 4, COL.amber],
+            [V.greeting, 5, COL.snow],
+            [V.nod, 4, COL.amber],
+            [V.kitLine, 4, COL.green],
+          ]
+            .filter(([s]) => s)
+            .flatMap(([s, k, color]) =>
+              measure(s, 32, k) <= CARD_ROOM
+                ? [[s, k, color]]
+                : breakLines(s.split(" "), " ", (l) => measure(l, 32, 4) <= CARD_ROOM).map((t) => [
+                    t,
+                    4,
+                    color,
+                  ]),
+            );
+        // the line pitch: the glyphs (8 font pixels) plus three font pixels of leading
+        const cardH = (lines) => lines.reduce((h, [, k]) => h + 11 * k, 0) + 2 * CARD.pad;
+        function endCard(a, al = 1) {
+          if (a <= 0 || al <= 0) return;
+          if (al < 1) return faded(al, () => endCard(a));
+          const lines = cardLines();
+          const h = cardH(lines);
+          const py0 = Math.round(CARD.y1 - h + (1080 - CARD.y1 + h) * (1 - a));
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(0, 0, 1920, CARD.y1);
+          ctx.clip();
+          plate(CARD.x0, py0, CARD.x1 - CARD.x0, h, COL.night, COL.teal, 6, 0.94);
+          let y = py0 + CARD.pad;
+          lines.forEach(([s, k, color]) => {
+            y += 11 * k;
+            txt(s, CARD.x0 + 48, y - k, { k, color });
+          });
+          ctx.restore();
+        }
+        // the build reaches 100 % on the whole room, the room holds clean, then one dissolve,
+        // block by block, into the game's title screen with its board texts already lit: nothing
+        // of the customer's room and nothing of the title screen ever shows twice, and no board
+        // ever shows empty
+        const PRESS_AT = 4.0;
+        const DISSOLVE = 1.2;
+        const TITLE_HOLD = 1.0;
+        // the title's extra life is gone this much story time before the film's end: by the last
+        // frame
+        const OUTRO_FADE_END = 0.05;
+        // the end card's story time from its rise to the start of its fade
+        const CARD_HOLD = 3.4;
+        // f draws onto canvas cv, cleared first, instead of the frame
+        const into = (cv, f) => {
+          const main = ctx;
+          ctx = cv.getContext("2d");
+          ctx.imageSmoothingEnabled = false;
+          ctx.clearRect(0, 0, cv.width, cv.height);
+          f();
+          ctx = main;
+        };
+        const hubCv = document.createElement("canvas");
+        hubCv.width = 1920;
+        hubCv.height = 1080;
+        const zoomCv = document.createElement("canvas");
+        zoomCv.width = 1920;
+        zoomCv.height = 1080;
+        const mosaicCv = document.createElement("canvas");
+        mosaicCv.width = 320;
+        mosaicCv.height = 180;
+        // hubT shows whole half steps of zoom, so a camera move pans at a fixed zoom and
+        // crosses each step with a mosaic over 8 frames instead of a one-frame jump; the camera
+        // holds still through it (a step lies between two stop keys with the same centre).
+        // zoomSteps: [time, zoom before, zoom after] per step of cam between a and b.
+        const ZOOM_W = 8 / 30 / PACE;
+        const zoomSteps = (cam, a, b) => {
+          const q = (u) => Math.max(1, Math.round(cam(u)[2] * 2) / 2);
+          const out = [];
+          for (let u = a; u < b; u += 0.001) if (q(u + 0.001) !== q(u)) out.push([u, q(u), q(u + 0.001)]);
+          return out;
+        };
+        // The hub through cam at u, hub(T, extra) drawing it with T; inside a step both zooms
+        // draw and the build reading draws once over them, gliding between its two places.
+        // Returns the T of the unrounded camera.
+        function hubThrough(cam, steps, u, hub) {
+          const [cx, cy, z] = cam(u);
+          const T = hubT(cx, cy, z);
+          const st = steps.find(([su]) => Math.abs(u - su) < ZOOM_W / 2);
+          if (!st) {
+            hub(T, {});
+            return T;
+          }
+          const [su, z0, z1] = st;
+          const p = (u - su + ZOOM_W / 2) / ZOOM_W;
+          const [T0, T1] = [hubT(cx, cy, z0), hubT(cx, cy, z1)];
+          let tip = null;
+          const onTip = (_, tp, o) => (tip = [tp, o]);
+          // the console's mosaic: the whole picture coarsens to blocks of up to four units and
+          // resolves at the new zoom, the swap at its coarsest; block sizes divide the frame
+          into(zoomCv, () => hub(p < 0.5 ? T0 : T1, { onTip }));
+          const B = [6, 12, 24, 24, 24, 24, 12, 6][clamp(Math.floor(p * 8), 0, 7)];
+          const [mw, mh] = [1920 / B, 1080 / B];
+          const g = mosaicCv.getContext("2d");
+          g.imageSmoothingEnabled = true;
+          g.imageSmoothingQuality = "high";
+          g.clearRect(0, 0, mw, mh);
+          g.drawImage(zoomCv, 0, 0, mw * B, mh * B, 0, 0, mw, mh);
+          ctx.imageSmoothingEnabled = false;
+          ctx.drawImage(mosaicCv, 0, 0, mw, mh, 0, 0, mw * B, mh * B);
+          if (tip)
+            buildTip(
+              {
+                s: lerp(T0.s, T1.s, p),
+                x0: lerp(T0.x0, T1.x0, p),
+                y0: lerp(T0.y0, T1.y0, p),
+              },
+              ...tip,
+            );
+          return T;
+        }
+        function sceneHubOutro(t) {
+          const o = t - CUTS[3];
+          const [px, py] = point("portal");
+          // the whole room, the camera still from the portal's iris to the last frame
+          const T = hubT(hubImg.width / 2, hubImg.height / 2, 1.0);
+          const d = clamp((o - PRESS_AT) / DISSOLVE);
+          const hub = (T) =>
+            drawHub(T, t, {
+              // the belt stops with its gifts where the title picture paints them
+              beltT: Math.min(o, 0.6) - 0.6,
+              // the reading goes 0.1 s before the press: the whole room shows clean for the
+              // poster (scripts/greeting.sh takes it at 62.6 s, (CUTS[3] + 3.95) * PACE)
+              tips: o > 1.2 && o < PRESS_AT - 0.1,
+              progress: clamp((o - 1.4) / 0.8),
+              burst: o - 2.2,
+            });
+          const e0 = CUTS[3] + PRESS_AT + DISSOLVE + 0.4 + TITLE_HOLD;
+          if (d <= 0) hub(T);
+          else {
+            drawHub(T, t, { plain: true });
+            gameTitle(T, t, 1);
+            if (d < 1) {
+              into(hubCv, () => hub(T));
+              // blocks go in a wave from the centre outward, each at its own moment
+              const B = 24;
+              for (let by = 0; by < 1080 / B; by++)
+                for (let bx = 0; bx < 1920 / B; bx++) {
+                  const r = Math.hypot(bx - 40, (by - 22.5) * 1.6) / 46;
+                  if (d < 0.55 * r + 0.4 * hash(by * 97 + bx))
+                    ctx.drawImage(hubCv, bx * B, by * B, B, B, bx * B, by * B, B, B);
+                }
+            }
+            // the strip's lines fade in whole over the dissolve, never cut by a block
+            gameStrip(T, ease(d), ease((t - e0) / 0.4));
+          }
+          if (o < 1.0) {
+            const R = scr(T, { x: px, y: py, w: 0, h: 0 });
+            portalRing(R.x, R.y, lerp(1500, 0, ease(o / 1.0)), t, () => {
+              UI_A = clamp(1 - o / 0.25);
+              sceneBoss(CUTS[3] - 0.01);
+              UI_A = 1;
+            });
+          }
+          // the clean title holds with PRESS START blinking (1.5 s on the frame clock), then the
+          // end card slides up from the bottom with the strip's QR call, holds for about 5 s and
+          // fades; the extra life fades over the last 1.5 s, so the last frame is the game's title
+          // screen with the call and its QR code on the strip
+          const out = clamp((DUR - OUTRO_FADE_END - t) / (1.5 / PACE));
+          if (d >= 1) titleLife(T, t, clamp((o - PRESS_AT - DISSOLVE) / 0.4) * out);
+          endCard(ease((t - e0) / 0.4), clamp((e0 + CARD_HOLD - t) / (0.6 / PACE)));
+        }
+
+        function scene(t) {
+          if (t < CUTS[0]) sceneHubIntro(t);
+          else if (t < CUTS[1]) sceneMap(t);
+          else if (t < CUTS[2]) sceneRooms(t);
+          else if (t < CUTS[3]) sceneBoss(t);
+          else sceneHubOutro(t);
+        }
+        // An iris around a cut, the portal's ring: the scene before the cut holds its last frame
+        // while its texts fade, the ring opens on the scene after it from the centre, and that
+        // scene's texts fade in once the ring has filled the frame
+        function draw(t) {
+          ctx.imageSmoothingEnabled = false;
+          ctx.clearRect(0, 0, 1920, 1080);
+          UI_A = 1;
+          const c = WIPES.find((c) => Math.abs(t - c) < 0.35);
+          if (c === undefined) return scene(t);
+          const p = (t - c + 0.35) / 0.7;
+          UI_A = clamp(1 - p / 0.2);
+          scene(Math.min(t, c - 0.001));
+          portalRing(960, 540, lerp(0, 1150, ease((p - 0.2) / 0.65)), t, () => {
+            UI_A = clamp((p - 0.85) / 0.15);
+            scene(Math.max(t, c));
+          });
+          UI_A = 1;
+        }
+
+        const clock = { t: 0 };
+        Promise.all([
+          hubImg.decode(),
+          hub960.decode(),
+          custLogo.decode(),
+          hubMask.decode(),
+          baseImg.decode(),
+          giftImg.decode(),
+          BOSS_IMG.menacing.decode(),
+          BOSS_IMG.friendly.decode(),
+          ...backdropLoads,
+          ...spriteLoads,
+          document.fonts.load(`8px ${PIXEL}`, "PRESS START 2027 ÄÖÜäöüß¡·"),
+        ]).then(() => {
+          findLights();
+          buildMask();
+          buildCells();
+          // the render fails rather than cut a team name: shorten it in the customer's teams
+          const tags = slots("tag");
+          const free = tags.filter((t) => t.text === undefined).length;
+          if (TEAMS.length > free)
+            throw new Error(`more teams than gift tags (${free}): ${TEAMS.slice(free).join(" | ")}`);
+          const tooLong = [...TEAMS, ...tags.map((t) => t.text ?? "")].filter(
+            (n) => tags.length && !tagFit(n, Math.min(...tags.map((t) => cellOf(t).w))),
+          );
+          if (tooLong.length) throw new Error(`gift tag text too long: ${tooLong.join(" | ")}`);
+          // a layout from before ink lines and logo grounds were removed, or a plate with no text,
+          // stops the render rather than draw something else
+          const stale = (HUB.slots ?? []).filter(
+            (s) =>
+              s.ink !== undefined ||
+              (s.kind === "logo" && s.bg !== undefined) ||
+              (s.kind === "label" && !s.text),
+          );
+          if (stale.length)
+            throw new Error(
+              `layout slot with a removed key (ink, logo bg) or a label without text: ${stale.map((s) => JSON.stringify(s)).join(" | ")}`,
+            );
+          // and rather than fall back to ink lines on a plate or board: shorten the text
+          const plates = (HUB.slots ?? []).flatMap((s) =>
+            s.kind === "label"
+              ? [[s, s.text, 6, true]]
+              : s.kind === "board"
+                ? [[s, boardText(s), 4]]
+                : s.kind === "doorsign"
+                  ? [[s, V.doorTitle, 4]]
+                  : [],
+          );
+          const unfit = plates.filter(([s, text, m, lit]) => text && !labelFit(cellOf(s), text, m, lit));
+          if (unfit.length) throw new Error(`plate text does not fit: ${unfit.map((p) => p[1]).join(" | ")}`);
+          // and rather than run a leader line through another tag's plate: shorten nothing, but
+          // the render stops where no rows keep every line clear
+          const crowded = stops.filter((s, r) => tagsOf(r, 0, 0).some((L) => L.bad));
+          if (crowded.length)
+            throw new Error(
+              `ground tags with no rows clear of each other's lines: ${crowded.map((s) => s.place).join(" | ")}`,
+            );
+          // and rather than cover the wizard or a board, or shrink a line under the phone minimum:
+          // the end card fits its space, every word on its width
+          const card = cardLines();
+          if (CARD.y1 - cardH(card) < CARD.top || card.some(([s, k]) => measure(s, 32, k) > CARD_ROOM))
+            throw new Error(
+              `end card too tall or a word too wide for its space beside the wizard: shorten customerName, greeting, nod or kitLine`,
+            );
+          // and rather than cartwheel through someone or off the frame's edge: the crosser needs
+          // a room without a walker and, left of where the hero waits, twice its own width (a
+          // visitor stands right of that span)
+          const cr = EGG.crosser;
+          if (cr && SP[cr.art] && (EGG.walker?.r === cr.r || heroWait(cr.r) - 8 < 2 * SP[cr.art].w))
+            throw new Error(
+              `crosser in room ${cr.room}: it needs a room without a walker, the hero waiting twice its width in`,
+            );
+          // and rather than show a film without a room: stop1Place names the first stop
+          if (!stops.length) throw new Error("no stop: set stop1Place (an empty stopNPlace drops that stop)");
+          // and rather than show a stop where nobody speaks: every stop has a trainer and a line, a
+          // room in two places with two trainers a line for each
+          const mute = stops.filter((s) => !s.npcs.length || !s.line || (twoBeats(s) && !s.line2));
+          if (mute.length)
+            throw new Error(
+              `stop without a trainer and a line (or, in two places with two trainers, line 2): ${mute.map((s) => s.place).join(" | ")}`,
+            );
+          // and rather than guess a trainer's look or show two trainers as one person: give each
+          // its own look in trainerLooks
+          const trainers = [...new Set(stops.flatMap((s) => s.npcs))];
+          const bare = trainers.filter((n) => !Number.isInteger(lookOf(n)));
+          if (bare.length)
+            throw new Error(`trainer without a look 0-13 in trainerLooks: ${bare.join(" | ")}`);
+          const twins = trainers.filter((n, k) =>
+            trainers.some((o, j) => j !== k && lookOf(o) === lookOf(n)),
+          );
+          if (twins.length) throw new Error(`trainers share a look: ${twins.join(" | ")}`);
+          const tl = gsap.timeline({ paused: true });
+          tl.fromTo(
+            clock,
+            { t: 0 },
+            {
+              t: DUR * PACE,
+              duration: DUR * PACE,
+              ease: "none",
+              onUpdate: () => draw(clock.t / PACE),
+            },
+            0,
+          );
+          draw(0);
+          window.__timelines["main"] = tl;
+        });
+      })();
+    </script>
+  </body>
+</html>

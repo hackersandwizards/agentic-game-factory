@@ -1,0 +1,4 @@
+interface:
+  display_name: "Quest"
+  short_description: "Build the next quest from GAME.md"
+  default_prompt: "Use $quest to build the next quest of my game."

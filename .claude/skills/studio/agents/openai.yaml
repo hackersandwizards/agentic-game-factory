@@ -1,0 +1,4 @@
+interface:
+  display_name: "Studio"
+  short_description: "Trailer and greeting video for your game"
+  default_prompt: "Use $studio to make a trailer for my game."

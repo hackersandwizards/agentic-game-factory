@@ -1,0 +1,8 @@
+A sprite sheet for the three enemies of a side-scrolling platformer, on a solid flat pure green #00FF00 background with hard edges: cute but clearly hostile software beetles in side view, facing left, with the designs of the attached bugs-old.png, repainted twice as fine.
+Danger colour: every beetle has glowing hot-magenta #FF2E88 eyes and a thin hot-magenta stripe along its shell, and no other colour in the sheet comes close to that magenta. Their shells are otherwise dark and muted, so the magenta is what reads.
+Size: at the left of the row stands the wizard from the attached hero.png, idle, the same design. Every beetle reaches up to the wizard's belt (55 % of his height from boots to hat tip) and is 70 % as long as he is tall. Wizard and beetles share one art-pixel size. Draw the row as large as the image allows: the wizard fills most of the image height.
+After the wizard, six frames in two rows of three, two walk frames per beetle (only the legs alternating, the same beetle at the same size, feet on one baseline per row), with clear green space between all of them:
+1-2. a purple beetle;
+3-4. a fast red-orange beetle, sleeker and lower, with swept-back antennae;
+5-6. a dark teal-green hopping beetle with strong grasshopper back legs, its greens dark and bluish so they never come close to the background green.
+16:9 landscape, at least 2048 pixels wide. File: bugs.png

@@ -1,0 +1,3 @@
+#!/bin/sh
+bun --no-env-file scripts/tasks.mjs install ||
+  echo "Automatic install did not finish. Run bun install --frozen-lockfile in this checkout." >&2

@@ -1,0 +1,234 @@
+{
+  "base": "assets/workshop-film.png",
+  "mask": "assets/workshop-film-magenta.png",
+  "points": {
+    "portal": [850, 190],
+    "crystal": [851, 322]
+  },
+  "always": [
+    {
+      "kind": "belt",
+      "x": 460,
+      "y": 636,
+      "w": 827,
+      "h": 86,
+      "speed": 20,
+      "layer": [470, 600]
+    },
+    {
+      "kind": "window",
+      "x": 140,
+      "y": 55,
+      "w": 340,
+      "h": 400
+    }
+  ],
+  "slots": {
+    "A": {
+      "what": "main sign above the fireplace",
+      "layout": [
+        {
+          "kind": "logo",
+          "x": 528,
+          "y": 126,
+          "w": 209,
+          "h": 109
+        }
+      ]
+    },
+    "B": {
+      "what": "overhead rail object, replaces the departure board",
+      "holds": "an empty departure board hanging from the ceiling on two rods, string lights and a ghost picture at its left",
+      "box": [1075, 0, 465, 180],
+      "empty": [
+        {
+          "kind": "board",
+          "x": 1248,
+          "y": 63,
+          "w": 271,
+          "h": 92
+        }
+      ]
+    },
+    "C1": {
+      "what": "painting left of the robot",
+      "holds": "the lower left corner of the departure board, a small blank frame and pipes",
+      "box": [1195, 130, 150, 135],
+      "empty": [
+        {
+          "kind": "label",
+          "text": "Agents\nat work",
+          "x": 1214,
+          "y": 235,
+          "w": 65,
+          "h": 43
+        }
+      ]
+    },
+    "C2": {
+      "what": "painting top right",
+      "holds": "the right end of the departure board above two lamps and pipes",
+      "box": [1370, 55, 175, 190]
+    },
+    "C3": {
+      "what": "painting right",
+      "holds": "a server rack with green lights beside pipes",
+      "box": [1345, 200, 160, 140]
+    },
+    "D": {
+      "what": "plaque above the door (doorTitle)",
+      "layout": [
+        {
+          "kind": "doorsign",
+          "x": 1518,
+          "y": 205,
+          "w": 132,
+          "h": 52
+        }
+      ]
+    },
+    "E": {
+      "what": "robot colleague, text on its chest plate",
+      "holds": "a purple 3D printer printing a tree, server racks, a map frame on the shelf, the blue wizard and two elves at their laptops in front",
+      "box": [1035, 200, 405, 360],
+      "filled": [
+        {
+          "kind": "label",
+          "x": 1231,
+          "y": 377,
+          "w": 46,
+          "h": 20
+        }
+      ],
+      "points": {
+        "crown": [1236, 270]
+      }
+    },
+    "F": {
+      "what": "booth, text on its sign",
+      "holds": "two elves at a table with miniatures and a blue cloth, a Christmas tree and the door behind",
+      "box": [1330, 400, 342, 270],
+      "filled": [
+        {
+          "kind": "label",
+          "x": 1442,
+          "y": 484,
+          "w": 118,
+          "h": 35
+        }
+      ]
+    },
+    "G": {
+      "what": "h&w sticker on the wizard's laptop lid",
+      "layout": [
+        {
+          "kind": "logo",
+          "src": "hw",
+          "x": 811,
+          "y": 480,
+          "w": 84,
+          "h": 56,
+          "quad": [
+            [826, 480],
+            [908, 479],
+            [896, 535],
+            [811, 535]
+          ]
+        }
+      ]
+    },
+    "H1": {
+      "layout": [
+        {
+          "kind": "tag",
+          "x": 502,
+          "y": 678,
+          "w": 88,
+          "h": 34
+        }
+      ]
+    },
+    "H2": {
+      "layout": [
+        {
+          "kind": "tag",
+          "x": 660,
+          "y": 678,
+          "w": 88,
+          "h": 34
+        }
+      ]
+    },
+    "H3": {
+      "layout": [
+        {
+          "kind": "tag",
+          "x": 811,
+          "y": 678,
+          "w": 88,
+          "h": 34
+        }
+      ]
+    },
+    "H4": {
+      "layout": [
+        {
+          "kind": "tag",
+          "x": 966,
+          "y": 678,
+          "w": 88,
+          "h": 34
+        }
+      ]
+    },
+    "H5": {
+      "layout": [
+        {
+          "kind": "tag",
+          "x": 1131,
+          "y": 678,
+          "w": 88,
+          "h": 34
+        }
+      ]
+    },
+    "I1": {
+      "what": "floor prop in front of the belt",
+      "holds": "bare floor planks with two small gifts, a burlap gift sack and two crates in front of the belt",
+      "box": [900, 790, 330, 150]
+    },
+    "I2": {
+      "what": "floor prop left of the belt",
+      "holds": "an elf with a magnifying glass leaning on the belt's left end",
+      "box": [350, 540, 200, 280]
+    },
+    "J": {
+      "what": "loom, text on its plate",
+      "holds": "a mimic chest with its tongue out, a crate with a teddy bear and gifts, and greenery",
+      "box": [1340, 640, 332, 300],
+      "filled": [
+        {
+          "kind": "label",
+          "x": 1390,
+          "y": 812,
+          "w": 53,
+          "h": 44,
+          "hang": 752
+        }
+      ]
+    },
+    "K1": {
+      "what": "the left desk's laptop, painted lid toward the viewer: the CRT callout's cable starts here",
+      "layout": [
+        {
+          "kind": "anchor",
+          "x": 134,
+          "y": 504,
+          "w": 75,
+          "h": 51,
+          "callout": true
+        }
+      ]
+    }
+  }
+}

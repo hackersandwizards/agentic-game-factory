@@ -1,0 +1,7 @@
+Generate the image with your image generation tool, then copy the final image into the current working directory under the exact file name given at the end. Edit no other file. Check that the file exists before you finish and print its pixel size.
+
+Attached: reference.png, the palette, lighting and mood to match (a 16-bit pixel-art Christmas workshop at night). Any other attachment is a design reference: keep its design, colours and proportions, and repaint it at the finer pixel size below.
+
+Style, strict: 2D pixel art drawn twice as fine as the attached design references: every art pixel is a square block of exactly 4x4 image pixels, one block size across the whole image, hand-placed clusters, hard edges, a limited palette with 4 to 6 shading steps per material, no gradients, no blur, no anti-aliasing, no soft glow, no painterly shading, no photographic light. Palette as in reference.png: night blues #0B1118, #111A24 and #1B2A3C as the base, teal #1A7285 and #2DD4BF, purple #9333EA, amber #F59E0B for warm lights, snow #E8F1F2, small green #4ADE80 accents. Outdoors is a snowy winter night lit by cool moonlight from the upper right; warm amber only where a lamp, a fire or a lit window is. A 1 art-pixel dark outline on characters and objects.
+
+Absolutely no text, letters, numbers, digits, symbols, logos or brand marks anywhere. Every screen, sign and label is blank.

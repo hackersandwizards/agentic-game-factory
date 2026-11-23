@@ -1,0 +1,14 @@
+Generate images with your image generation tool, then copy each final image into the current working directory under the file names below. Edit no other file.
+
+Style: match the attached reference.png exactly: 2D pixel art, 16-bit era Metroidvania, crisp hand-placed pixels, no gradients, no blur, no anti-aliasing, limited palette: night blue #0B1118 and #111A24, teal #1A7285, purple #9333EA, amber #F59E0B for warm lights, green #4ADE80 accents, snow white. No text, letters, numbers, logos or brand marks anywhere.
+
+These are background layers for a side-scrolling Christmas-night platformer game. Every layer must tile seamlessly horizontally (left edge continues the right edge) and is a wide landscape strip, 3:1 aspect ratio or wider if possible, otherwise 16:9.
+
+Files:
+1. bg-1-sky.png: deep night sky with stars, a large soft pixel moon, a faint teal-and-purple aurora band. Fully opaque.
+2. bg-2-mountains.png: distant snowy mountain range silhouette in cool blues with a few tiny warm windows of a far village; everything above the mountains is pure chroma green #00FF00 (to be keyed out).
+3. bg-3-forest.png: mid-distance snowy pine forest and a small timber workshop with glowing windows and a chimney; above the treeline pure chroma green #00FF00.
+4. bg-4-near.png: near-foreground snowy bushes and a fence with string lights along the very bottom quarter only; everything else pure chroma green #00FF00.
+5. tiles.png: a game tileset sheet on pure chroma green #00FF00, laid out on a strict grid of square 16x16-pixel-art tiles (draw them large but keeping the 16x16 pixel grid visible as chunky pixels): snow-capped stone ground top-left/top-middle/top-right, ground fill, a floating wooden platform with snow (left, middle, right), a candy-cane pole, a small snowy crate, icicles. Leave clear chroma gaps between tiles.
+
+Print the files with pixel sizes when done.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Game wizard"
+  short_description: "Find your game and write GAME.md"
+  default_prompt: "Use $game-wizard to find the game I should build."

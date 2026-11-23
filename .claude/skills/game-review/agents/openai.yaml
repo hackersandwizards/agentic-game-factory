@@ -1,0 +1,4 @@
+interface:
+  display_name: "Game review"
+  short_description: "A fresh agent plays and rates the game"
+  default_prompt: "Use $game-review to have a fresh agent play and rate my game."

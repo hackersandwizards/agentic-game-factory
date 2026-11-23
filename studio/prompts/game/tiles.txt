@@ -1,0 +1,5 @@
+A tileset for a side-scrolling platformer, on a solid flat pure green #00FF00 background with hard edges. Every tile is a square of 48x48 art pixels, every art pixel a 4x4 block of image pixels, laid out in one grid with a one-tile green gap between tiles. Design as in the attached tiles-old.png (grey-blue stone bricks under a thick snow cap, a wooden plank bridge, a wooden crate), repainted twice as fine, at the pixel size of the wizard in the attached hero.png.
+Row 1, ground with snow on top: left end (snow cap curling over the left edge, chipped stone corner), middle (snow cap, the bricks continue seamlessly to the left and right), right end (mirror of the left end).
+Row 2, ground below the surface: left side, middle fill (bricks that tile seamlessly in all four directions), right side.
+Row 3: plank bridge left end, plank bridge middle (tiles seamlessly left and right), plank bridge right end, and one wooden crate with iron corners and a little snow on top. Planks are the upper third of their tile only, the rest green.
+Square image, at least 2048 pixels wide. File: tiles.png

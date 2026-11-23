@@ -1,0 +1,17 @@
+{
+  "source": "Copied from @hackersandwizards/brand v1.28.4 (generated/tokens.json, --color-<name>). Brand is a public repository, but under PolyForm Strict 1.0.0, which allows no distribution and no new works based on it; this MIT kit goes to people outside h&w, who publish their own builds of it, so it does not install brand: this file is the one copy, and every colour that marks h&w in the example and in studio/ (the night ground, the wordmark, its frame lines) reads from it; the game's own pixel palette stays in its files, also where a value equals a brand colour. Raise it from brand's newest tag and update the version here.",
+  "colors": {
+    "night": "#0b1118",
+    "ink": "#19283a",
+    "teal": "#1a7285",
+    "purple": "#9333ea",
+    "green": "#4ade80",
+    "amber": "#f59e0b",
+    "amberDark": "#b45309",
+    "muted": "#545861",
+    "border": "#d0d2d8",
+    "ampersand": "#7c849c",
+    "nightInk": "#ebeced",
+    "nightMuted": "#cecfd1"
+  }
+}

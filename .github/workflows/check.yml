@@ -1,0 +1,45 @@
+# Runs every push check, the build and the boot test on every pull request, on a machine that is not
+# the author's. Not the other browser tests: on GitHub's runner, which has no GPU, 70 of the first 87
+# failed and the run was still going after 26 minutes.
+name: Check
+
+on:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      browser_tests:
+        description: Playwright arguments, such as a spec file, to run in place of the boot test
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-26.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6 # v2.2.0
+        with:
+          bun-version-file: package.json
+      # Chrome for Testing, which tests/chrome.ts downloads when the cache holds none.
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: ~/.cache/puppeteer
+          key: chrome-${{ runner.os }}-${{ hashFiles('bun.lock') }}
+      - run: bun install --frozen-lockfile
+      # An all-zero remote tip is a new branch to the push hook: it runs all of its checks.
+      - run: bun run check --changed 0000000000000000000000000000000000000000..${{ github.sha }}
+      - if: ${{ !inputs.browser_tests }}
+        run: bun run test:boot
+      # Unquoted: the input is a list of arguments.
+      - if: ${{ inputs.browser_tests }}
+        run: bun --bun playwright test $BROWSER_TESTS
+        env:
+          BROWSER_TESTS: ${{ inputs.browser_tests }}

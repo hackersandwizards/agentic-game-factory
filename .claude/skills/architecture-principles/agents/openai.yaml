@@ -1,0 +1,4 @@
+interface:
+  display_name: "Architecture principles"
+  short_description: "Review an architecture, name design red flags, choose a design"
+  default_prompt: "Use $architecture-principles to review this design."

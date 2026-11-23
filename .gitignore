@@ -1,0 +1,26 @@
+node_modules/
+dist/
+test-results/
+playwright-report/
+.DS_Store
+.env*
+/playtest/
+studio/node_modules/
+studio/renders/
+studio/*/.hyperframes/
+studio/*/assets/vendor/
+studio/trailer/assets/clip.mp4
+studio/trailer/assets/title.png
+studio/greeting/customer
+# a real customer's files stay out of the repo; only the sample is tracked
+studio/greeting/customers/*
+!studio/greeting/customers/beispiel-gmbh.json
+!studio/greeting/customers/beispiel-gmbh-en.json
+!studio/greeting/customers/beispiel-gmbh/
+studio/greeting/customers/beispiel-gmbh/*
+!studio/greeting/customers/beispiel-gmbh/I1.png
+studio/greeting/assets/audio/
+studio/cx/
+studio/game-art/.build/
+/coverage/
+/.stryker-tmp/

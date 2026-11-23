@@ -1,0 +1,4 @@
+interface:
+  display_name: "Delegation"
+  short_description: "Launch, prod, stop and check a delegate"
+  default_prompt: "Use $delegation before starting a delegate."

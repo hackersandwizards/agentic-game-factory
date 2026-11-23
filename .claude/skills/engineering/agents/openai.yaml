@@ -1,0 +1,4 @@
+interface:
+  display_name: "Engineering"
+  short_description: "How to build and change the code here"
+  default_prompt: "Use $engineering before implementing, refactoring or fixing a bug."

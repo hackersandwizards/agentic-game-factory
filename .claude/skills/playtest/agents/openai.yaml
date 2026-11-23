@@ -1,0 +1,4 @@
+interface:
+  display_name: "Playtest"
+  short_description: "Play the game in a headless browser"
+  default_prompt: "Use $playtest to play the game and show me what you see."

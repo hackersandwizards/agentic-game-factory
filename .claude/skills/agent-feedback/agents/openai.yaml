@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent feedback"
+  short_description: "Improve the skill or rule that owns a behaviour"
+  default_prompt: "Use $agent-feedback to improve the skill or rule that owns this behaviour."

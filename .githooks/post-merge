@@ -1,0 +1,4 @@
+#!/bin/sh
+if [ ! -d node_modules ] || ! git diff --quiet ORIG_HEAD HEAD -- package.json bun.lock bunfig.toml; then
+  exec .githooks/install
+fi

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" href="data:," />
+    <title>My game</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: var(--night);
+      }
+      /* Points first-time visitors to the example. Delete this rule, the link and its font import for your game. */
+      #example {
+        position: fixed;
+        inset: auto 0 12px 0;
+        text-align: center;
+        font:
+          16px/1.6 "Press Start 2P",
+          monospace;
+        color: #f59e0b;
+        text-decoration: none;
+      }
+      #example:hover,
+      #example:focus-visible {
+        color: #fde68a;
+        text-decoration: underline;
+        text-underline-offset: 6px;
+        outline: none;
+      }
+    </style>
+  </head>
+  <body>
+    <a id="example" href="../examples/present/">THE EXAMPLE GAME: /examples/present/ &gt;</a>
+    <script type="module">
+      import "@fontsource/press-start-2p/latin-400.css";
+    </script>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
