@@ -46,7 +46,7 @@
     "@typescript/native": "npm:typescript@7.0.2",
     "@vitest/coverage-v8": "5.1.2",
     "dependency-cruiser": "18.9.0",
-    "eslint": "10.15.0",
+    "eslint": "10.16.0",
     "fast-check": "4.11.0",
     "markdown-it": "15.0.3",
     "oxlint": "1.95.0",
